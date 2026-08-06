@@ -1,22 +1,245 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>AI Compliance Repository</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <h1>Welcome to the AI Compliance Repository</h1>
-        <div class="header">
-            <h1>AI Compliance Repository</h1>
-            <p>Find AI regulations for your target market</p>
+<html lang="en">
+<head>
+  <!--
+    <meta charset> tells the browser to use UTF-8 encoding —
+    this ensures special characters (like Chinese text) display correctly.
+    Always include this as the very first tag inside <head>.
+  -->
+  <meta charset="UTF-8">
+
+  <!--
+    <meta name="viewport"> makes the site responsive on mobile.
+    Without this, phones zoom out and show a tiny desktop version.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HSITP AI Compliance Repository</title>
+
+  <!--
+    We import two Google Fonts here — Inter for body text (clean, modern,
+    great for reading dense regulatory info) and DM Serif Display for the
+    logo/hero headline (gives the platform a trustworthy, institutional feel
+    without looking like a government PDF).
+    The <link> tag in <head> loads external resources before the page renders.
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!--
+    This links our CSS file. The browser reads this and applies all our
+    styles before showing the page to the user.
+    rel="stylesheet" tells the browser what kind of file it is.
+    href is the path to the file — just the filename since it's in the same folder.
+  -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!--
+    The <header> is the top bar of the page. It contains the site logo/name
+    and a tagline. Using the semantic <header> tag (instead of just <div>)
+    is better practice — it helps screen readers and search engines understand
+    the page structure.
+  -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <!--
+          The logo uses two separate <span> tags so we can style each word
+          differently in CSS — "AI" gets an accent colour to make the brand
+          name memorable at a glance.
+        -->
+        <span class="logo-main">HSITP</span>
+        <span class="logo-accent">AI</span>
+        <span class="logo-main">Compliance Repository</span>
+      </div>
+      <p class="tagline">Navigate AI regulations across global markets — built for startups at HSITP</p>
+    </div>
+  </header>
+
+  <!--
+    <main> wraps the primary content of the page.
+    Like <header>, this is a semantic HTML5 tag that helps browsers
+    and assistive technologies understand what the important content is.
+  -->
+  <main>
+
+    <!-- ── HERO ─────────────────────────────────────────── -->
+    <!--
+      The hero section is the first thing users see.
+      It gives the platform context: what it does, who it's for.
+      We use a <section> tag — another semantic element, grouping
+      related content together.
+    -->
+    <section class="hero">
+      <h1>Know Before You Deploy</h1>
+      <p class="hero-sub">
+        AI compliance requirements differ significantly across jurisdictions.
+        Use the filters below to find the rules that apply to your product,
+        your data, and your target market.
+      </p>
+
+      <!--
+        These "stat chips" give users an at-a-glance sense of the platform's
+        coverage, building trust before they start searching.
+      -->
+      <div class="hero-stats">
+        <div class="stat-chip"><strong>8</strong> Jurisdictions</div>
+        <div class="stat-chip"><strong>3</strong> Themes</div>
+        <div class="stat-chip"><strong>25+</strong> Regulations</div>
+      </div>
+    </section>
+
+    <!-- ── FILTERS ───────────────────────────────────────── -->
+    <!--
+      The filter bar is the core interactive element.
+      Users select a jurisdiction and/or theme, then click Search.
+      The actual filtering logic lives in script.js — HTML just defines
+      the structure and the <select> options.
+    -->
+    <section class="filters-section">
+      <div class="filters-card">
+        <h2 class="filters-title">Find Regulations</h2>
+
+        <div class="filters-row">
+
+          <!--
+            <label> links descriptive text to its <select> input.
+            The "for" attribute must match the "id" on the <select>.
+            This is important for accessibility — screen readers announce
+            the label when a user focuses the dropdown.
+          -->
+          <div class="filter-group">
+            <label for="jurisdiction-filter">Jurisdiction</label>
+            <select id="jurisdiction-filter">
+              <!--
+                The first option is a placeholder — value="" means
+                "no filter applied". In script.js we check for this
+                to decide whether to filter or show everything.
+              -->
+              <option value="">All Jurisdictions</option>
+              <option value="china">Mainland China</option>
+              <option value="hongkong">Hong Kong SAR</option>
+              <option value="usa">United States</option>
+              <option value="eu">European Union</option>
+              <option value="uk">United Kingdom</option>
+              <option value="mena">MENA</option>
+              <option value="sea">South & Southeast Asia</option>
+              <option value="anz">Australia & New Zealand</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="theme-filter">Regulatory Theme</label>
+            <select id="theme-filter">
+              <option value="">All Themes</option>
+              <option value="data">Data Governance & Cross-Border Flows</option>
+              <option value="transparency">Algorithmic Transparency</option>
+              <option value="licensing">Licensing & Certification</option>
+            </select>
+          </div>
+
+          <!--
+            The search input lets users type a keyword.
+            placeholder= shows greyed-out hint text when the field is empty.
+            In script.js we read this value and check if it appears in
+            each regulation's text content.
+          -->
+          <div class="filter-group">
+            <label for="search-input">Keyword Search</label>
+            <input type="text" id="search-input" placeholder="e.g. PIPL, GDPR, cross-border...">
+          </div>
+
+          <!--
+            onclick="applyFilters()" calls a JavaScript function we define
+            in script.js. The browser runs that function when the button
+            is clicked.
+          -->
+          <div class="filter-group filter-btn-group">
+            <button onclick="applyFilters()" class="btn-search">Search</button>
+            <button onclick="clearFilters()" class="btn-clear">Clear</button>
+          </div>
+
         </div>
-        <div class="Filters">
-            <h1>Filters</h1>
-            <h2>Region</h2>
-            <h2>Country</h2>
-        </div>
-        <div class="results">
-            <h1>Compliance Results</h1>
-        </div>
-    </body>
+      </div>
+    </section>
+
+    <!-- ── RESULTS ───────────────────────────────────────── -->
+    <section class="results-section">
+
+      <!--
+        This bar shows how many results are currently showing.
+        The id="results-count" lets script.js find this element
+        and update its text dynamically without reloading the page.
+      -->
+      <div class="results-meta">
+        <span id="results-count">Showing all regulations</span>
+      </div>
+
+      <!--
+        id="results-grid" is the container where result cards appear.
+        script.js reads all the regulation data and builds HTML cards
+        inside this div. It's empty in the HTML — JavaScript fills it.
+      -->
+      <div id="results-grid" class="results-grid">
+        <!-- Cards injected by script.js -->
+      </div>
+
+      <!--
+        This empty-state message shows when no results match the filters.
+        It starts hidden (display:none in CSS) and script.js shows it
+        when the results grid would be empty.
+      -->
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <p>No regulations match your search. Try broadening your filters.</p>
+      </div>
+
+    </section>
+
+    <!-- ── DETAIL MODAL ──────────────────────────────────── -->
+    <!--
+      A modal is a pop-up overlay that appears on top of the page.
+      When a user clicks a regulation card, script.js fills this modal
+      with the full details of that regulation and makes it visible.
+      Clicking the backdrop or the × button closes it.
+
+      aria-modal and role="dialog" are accessibility attributes —
+      they tell screen readers this is a modal window.
+    -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()" aria-modal="true" role="dialog">
+      <!--
+        onclick="event.stopPropagation()" on the inner box prevents clicks
+        inside the modal from bubbling up to the overlay and closing it.
+        Without this, clicking anywhere inside would close the modal.
+      -->
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <!--
+          id="modal-content" is where script.js injects the full
+          regulation details when a card is clicked.
+        -->
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ───────────────────────────────────────────── -->
+  <footer>
+    <p>HSITP Ecosystem Development Division &nbsp;·&nbsp; Research current as of August 2026</p>
+    <p class="footer-note">This platform provides general informational guidance only and does not constitute legal advice.</p>
+  </footer>
+
+  <!--
+    <script> is placed at the bottom of <body> — NOT in <head>.
+    This is important: the browser reads HTML top to bottom.
+    If we put the script in <head>, it would run before the HTML elements
+    (like the results grid) exist yet, and JavaScript would fail to find them.
+    Placing it at the bottom ensures all HTML is loaded before JS runs.
+  -->
+  <script src="script.js"></script>
+
+</body>
 </html>
+
