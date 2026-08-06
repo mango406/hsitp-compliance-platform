@@ -1,14 +1,614 @@
-h1{
-    color: navy;
-    font-size: 34px;
-    text-align: center;
+/*
+  ══════════════════════════════════════════════════════════════
+  CSS CUSTOM PROPERTIES (variables)
+  ══════════════════════════════════════════════════════════════
+  We define all colours and fonts once here as variables using
+  the -- prefix. This means if you want to change the blue,
+  you only change ONE line and it updates everywhere.
+  Variables are accessed using var(--variable-name).
+*/
+:root {
+  /* Lighter blue palette as requested */
+  --blue-dark:    #2563EB;   /* Primary buttons, logo accent */
+  --blue-mid:     #3B82F6;   /* Hover states, links */
+  --blue-light:   #DBEAFE;   /* Card borders, tag backgrounds */
+  --blue-xlight:  #EFF6FF;   /* Card backgrounds, hero tint */
+
+  /* Neutral greys — used for text, borders, backgrounds */
+  --gray-900:     #111827;   /* Primary headings */
+  --gray-700:     #374151;   /* Body text */
+  --gray-500:     #6B7280;   /* Secondary text, placeholders */
+  --gray-200:     #E5E7EB;   /* Dividers, input borders */
+  --gray-100:     #F3F4F6;   /* Page background */
+  --white:        #FFFFFF;
+
+  /* Theme tag colours — each regulatory theme gets its own colour */
+  --tag-data:         #0E7490;   /* Teal for data governance */
+  --tag-data-bg:      #CFFAFE;
+  --tag-transparency: #7C3AED;   /* Purple for transparency */
+  --tag-transparency-bg: #EDE9FE;
+  --tag-licensing:    #B45309;   /* Amber for licensing */
+  --tag-licensing-bg: #FEF3C7;
+
+  /* Typography */
+  --font-display: 'DM Serif Display', Georgia, serif;  /* Headlines */
+  --font-body:    'Inter', system-ui, sans-serif;       /* Everything else */
+
+  /* Spacing scale — consistent spacing throughout the page */
+  --radius:    10px;   /* Border radius for cards and buttons */
+  --shadow:    0 2px 8px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
 }
-body{font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
+
+/*
+  ══════════════════════════════════════════════════════════════
+  RESET & BASE STYLES
+  ══════════════════════════════════════════════════════════════
+  box-sizing: border-box means padding and borders are INCLUDED
+  in an element's width/height — makes layout much more predictable.
+  Without this, adding padding to a 100px-wide div would make it wider.
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-.header{
-    background-color: #1f4e79;
-    color: white;
-    text-align: left;
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  line-height: 1.6;
+  /*
+    min-height: 100vh ensures the body is at least as tall as the viewport.
+    This prevents a white gap at the bottom on short pages.
+  */
+  min-height: 100vh;
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  HEADER
+  ══════════════════════════════════════════════════════════════
+*/
+header {
+  background: var(--white);
+  border-bottom: 3px solid var(--blue-dark);
+  /*
+    position: sticky keeps the header visible as users scroll down.
+    top: 0 means it sticks to the top of the viewport.
+    z-index: 100 ensures it stays on top of other content while scrolling.
+  */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.header-inner {
+  /*
+    max-width limits how wide content gets on large screens.
+    margin: 0 auto centres the content horizontally.
+    padding adds breathing room on the left and right.
+  */
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 24px;
+}
+
+.logo {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  color: var(--gray-900);
+  /*
+    display: flex puts the three <span> elements in a horizontal row.
+    gap adds space between them.
+  */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo-accent {
+  background: var(--blue-dark);
+  color: var(--white);
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.tagline {
+  color: var(--gray-500);
+  font-size: 0.82rem;
+  margin-top: 4px;
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  HERO SECTION
+  ══════════════════════════════════════════════════════════════
+*/
+.hero {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
+  color: var(--white);
+  text-align: center;
+  padding: 60px 24px 52px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 400;   /* DM Serif Display is already bold-looking at normal weight */
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  opacity: 0.88;
+  max-width: 580px;
+  /*
+    margin: 0 auto centres a block element that has a max-width.
+    It pushes equal space on left and right.
+  */
+  margin: 0 auto 28px;
+  line-height: 1.65;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  /*
+    flex-wrap: wrap means if there isn't enough horizontal space
+    (e.g. on mobile), the chips wrap to a new line instead of overflowing.
+  */
+  flex-wrap: wrap;
+}
+
+.stat-chip {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 999px;   /* Very large radius = fully rounded pill shape */
+  padding: 6px 18px;
+  font-size: 0.88rem;
+}
+
+.stat-chip strong {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  FILTERS SECTION
+  ══════════════════════════════════════════════════════════════
+*/
+.filters-section {
+  max-width: 1100px;
+  margin: -28px auto 0;   /* Negative top margin overlaps slightly with the hero */
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;   /* Keeps the card above the hero background */
+}
+
+.filters-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 28px 32px;
+}
+
+.filters-title {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue-dark);
+  margin-bottom: 18px;
+}
+
+.filters-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;   /* Aligns everything to the bottom — makes the button line up with inputs */
+}
+
+.filter-group {
+  /*
+    flex: 1 means each filter group grows equally to fill available space.
+    min-width prevents them from getting too narrow on medium screens.
+  */
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;  /* Stacks label above input vertically */
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/*
+  These styles apply to both <select> and <input> elements.
+  We list them separated by a comma — CSS applies the same rules to both.
+*/
+.filter-group select,
+.filter-group input[type="text"] {
+  padding: 10px 14px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  background: var(--white);
+  /*
+    width: 100% makes inputs fill their parent container,
+    not the default fixed size browsers give form elements.
+  */
+  width: 100%;
+  transition: border-color 0.15s;   /* Smooth colour change on focus */
+}
+
+/*
+  :focus is a pseudo-class — it applies when the element is selected/clicked.
+  outline: none removes the browser's default blue outline (we add our own).
+*/
+.filter-group select:focus,
+.filter-group input[type="text"]:focus {
+  outline: none;
+  border-color: var(--blue-dark);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+
+.filter-btn-group {
+  flex-direction: row;   /* Override column direction — buttons sit side by side */
+  gap: 8px;
+  min-width: auto;
+  flex: 0;   /* Buttons don't grow — they stay their natural size */
+}
+
+.btn-search {
+  background: var(--blue-dark);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 24px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;   /* Shows the hand cursor when hovering */
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-search:hover {
+  background: var(--blue-mid);
+}
+
+.btn-clear {
+  background: transparent;
+  color: var(--gray-500);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btn-clear:hover {
+  border-color: var(--gray-500);
+  color: var(--gray-700);
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  RESULTS SECTION
+  ══════════════════════════════════════════════════════════════
+*/
+.results-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+.results-meta {
+  margin-bottom: 18px;
+  font-size: 0.88rem;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+/*
+  CSS Grid creates a multi-column card layout.
+  repeat(auto-fill, minmax(320px, 1fr)) means:
+  - Create as many columns as fit
+  - Each column is at least 320px wide
+  - Extra space is distributed evenly (1fr = 1 fraction of available space)
+  This automatically becomes 1 column on mobile, 2 on tablet, 3 on desktop.
+*/
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  REGULATION CARDS
+  ══════════════════════════════════════════════════════════════
+  Cards are created by script.js — we style them here using class names
+  that the JavaScript assigns when building each card's HTML.
+*/
+.reg-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--gray-200);
+  padding: 22px 24px;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+}
+
+/*
+  :hover applies when the mouse is over the element.
+  transform: translateY moves the card up 2px — creates a "lift" effect.
+*/
+.reg-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue-light);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;  /* Pushes jurisdiction tag to the right */
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: var(--gray-900);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.jurisdiction-tag {
+  background: var(--blue-xlight);
+  color: var(--blue-dark);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;  /* Prevents the tag from being squished */
+}
+
+.theme-tag {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Each theme gets its own colour, set using data attributes in script.js */
+.theme-tag.data         { background: var(--tag-data-bg);         color: var(--tag-data); }
+.theme-tag.transparency { background: var(--tag-transparency-bg); color: var(--tag-transparency); }
+.theme-tag.licensing    { background: var(--tag-licensing-bg);    color: var(--tag-licensing); }
+
+.card-summary {
+  font-size: 0.87rem;
+  color: var(--gray-500);
+  line-height: 1.55;
+  /*
+    These three lines together truncate text after 3 lines,
+    replacing the overflow with "...". This keeps cards uniform height.
+  */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gray-200);
+}
+
+.effective-date {
+  font-size: 0.76rem;
+  color: var(--gray-500);
+}
+
+.card-cta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--blue-dark);
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  EMPTY STATE
+  ══════════════════════════════════════════════════════════════
+*/
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--gray-500);
+  font-size: 0.95rem;
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  MODAL
+  ══════════════════════════════════════════════════════════════
+  The modal overlay covers the whole screen with a semi-transparent
+  dark background. The inner modal-box is the white popup itself.
+*/
+.modal-overlay {
+  /*
+    position: fixed positions relative to the viewport (not the page).
+    This means the modal stays in place even when the user scrolls.
+    inset: 0 is shorthand for top:0, right:0, bottom:0, left:0 — fills the screen.
+  */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  /*
+    display: flex + centering centres the white modal-box in the overlay.
+  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 24px;
+  /*
+    Hidden by default — script.js changes display to 'flex' when a card is clicked.
+    We use display:none rather than visibility:hidden because display:none
+    completely removes the element from layout, so it doesn't take up space.
+  */
+  display: none;
+}
+
+.modal-overlay.active {
+  display: flex;   /* script.js adds the 'active' class to show the modal */
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;        /* Never taller than 85% of the screen height */
+  overflow-y: auto;        /* Scroll inside the modal if content is long */
+  padding: 36px 40px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: var(--gray-100);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--gray-500);
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.modal-close:hover {
+  background: var(--gray-200);
+}
+
+/* Modal content styles — applied to HTML generated by script.js */
+.modal-jurisdiction {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--blue-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  color: var(--gray-900);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section h3 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+}
+
+.modal-section p {
+  font-size: 0.92rem;
+  color: var(--gray-700);
+  line-height: 1.65;
+}
+
+.modal-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--blue-dark);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid var(--blue-light);
+  transition: border-color 0.15s;
+}
+
+.modal-link:hover {
+  border-color: var(--blue-dark);
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  FOOTER
+  ══════════════════════════════════════════════════════════════
+*/
+footer {
+  background: var(--gray-900);
+  color: var(--gray-500);
+  text-align: center;
+  padding: 28px 24px;
+  font-size: 0.82rem;
+  line-height: 1.8;
+}
+
+.footer-note {
+  font-size: 0.76rem;
+  opacity: 0.7;
+}
+
+/*
+  ══════════════════════════════════════════════════════════════
+  RESPONSIVE: MOBILE ADJUSTMENTS
+  ══════════════════════════════════════════════════════════════
+  @media queries apply styles only when the screen matches a condition.
+  max-width: 640px means "only on screens 640px wide or smaller" — i.e. phones.
+*/
+@media (max-width: 640px) {
+  .hero h1 { font-size: 1.9rem; }
+  .hero { padding: 40px 20px 36px; }
+  .filters-card { padding: 20px; }
+  .modal-box { padding: 24px 20px; }
+  .filter-btn-group { flex: 1; }
+  .btn-search, .btn-clear { flex: 1; text-align: center; }
 }
