@@ -1,245 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!--
-    <meta charset> tells the browser to use UTF-8 encoding —
-    this ensures special characters (like Chinese text) display correctly.
-    Always include this as the very first tag inside <head>.
-  -->
   <meta charset="UTF-8">
-
-  <!--
-    <meta name="viewport"> makes the site responsive on mobile.
-    Without this, phones zoom out and show a tiny desktop version.
-  -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>HSITP AI Compliance Repository</title>
-
-  <!--
-    We import two Google Fonts here — Inter for body text (clean, modern,
-    great for reading dense regulatory info) and DM Serif Display for the
-    logo/hero headline (gives the platform a trustworthy, institutional feel
-    without looking like a government PDF).
-    The <link> tag in <head> loads external resources before the page renders.
-  -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!--
-    This links our CSS file. The browser reads this and applies all our
-    styles before showing the page to the user.
-    rel="stylesheet" tells the browser what kind of file it is.
-    href is the path to the file — just the filename since it's in the same folder.
-  -->
+  <title>HSITP AI Compliance Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-  <!--
-    The <header> is the top bar of the page. It contains the site logo/name
-    and a tagline. Using the semantic <header> tag (instead of just <div>)
-    is better practice — it helps screen readers and search engines understand
-    the page structure.
-  -->
-  <header>
+  <!-- ══ STICKY HEADER ══════════════════════════════════════ -->
+  <header class="site-header">
     <div class="header-inner">
       <div class="logo">
-        <!--
-          The logo uses two separate <span> tags so we can style each word
-          differently in CSS — "AI" gets an accent colour to make the brand
-          name memorable at a glance.
-        -->
-        <span class="logo-main">HSITP</span>
-        <span class="logo-accent">AI</span>
-        <span class="logo-main">Compliance Repository</span>
+        <span class="logo-hsitp">HSITP</span>
+        <span class="logo-pill">AI</span>
+        <span class="logo-rest">Compliance Platform</span>
       </div>
-      <p class="tagline">Navigate AI regulations across global markets — built for startups at HSITP</p>
+      <nav class="header-nav">
+        <a href="#platform" class="nav-link">Search Regulations</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
     </div>
   </header>
 
-  <!--
-    <main> wraps the primary content of the page.
-    Like <header>, this is a semantic HTML5 tag that helps browsers
-    and assistive technologies understand what the important content is.
-  -->
-  <main>
+  <!-- ══ WELCOME PAGE (full viewport) ══════════════════════ -->
+  <section class="welcome" id="welcome">
 
-    <!-- ── HERO ─────────────────────────────────────────── -->
-    <!--
-      The hero section is the first thing users see.
-      It gives the platform context: what it does, who it's for.
-      We use a <section> tag — another semantic element, grouping
-      related content together.
-    -->
-    <section class="hero">
-      <h1>Know Before You Deploy</h1>
-      <p class="hero-sub">
-        AI compliance requirements differ significantly across jurisdictions.
-        Use the filters below to find the rules that apply to your product,
-        your data, and your target market.
-      </p>
-
-      <!--
-        These "stat chips" give users an at-a-glance sense of the platform's
-        coverage, building trust before they start searching.
-      -->
-      <div class="hero-stats">
-        <div class="stat-chip"><strong>8</strong> Jurisdictions</div>
-        <div class="stat-chip"><strong>3</strong> Themes</div>
-        <div class="stat-chip"><strong>25+</strong> Regulations</div>
-      </div>
-    </section>
-
-    <!-- ── FILTERS ───────────────────────────────────────── -->
-    <!--
-      The filter bar is the core interactive element.
-      Users select a jurisdiction and/or theme, then click Search.
-      The actual filtering logic lives in script.js — HTML just defines
-      the structure and the <select> options.
-    -->
-    <section class="filters-section">
-      <div class="filters-card">
-        <h2 class="filters-title">Find Regulations</h2>
-
-        <div class="filters-row">
-
-          <!--
-            <label> links descriptive text to its <select> input.
-            The "for" attribute must match the "id" on the <select>.
-            This is important for accessibility — screen readers announce
-            the label when a user focuses the dropdown.
-          -->
-          <div class="filter-group">
-            <label for="jurisdiction-filter">Jurisdiction</label>
-            <select id="jurisdiction-filter">
-              <!--
-                The first option is a placeholder — value="" means
-                "no filter applied". In script.js we check for this
-                to decide whether to filter or show everything.
-              -->
-              <option value="">All Jurisdictions</option>
-              <option value="china">Mainland China</option>
-              <option value="hongkong">Hong Kong SAR</option>
-              <option value="usa">United States</option>
-              <option value="eu">European Union</option>
-              <option value="uk">United Kingdom</option>
-              <option value="mena">MENA</option>
-              <option value="sea">South & Southeast Asia</option>
-              <option value="anz">Australia & New Zealand</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="theme-filter">Regulatory Theme</label>
-            <select id="theme-filter">
-              <option value="">All Themes</option>
-              <option value="data">Data Governance & Cross-Border Flows</option>
-              <option value="transparency">Algorithmic Transparency</option>
-              <option value="licensing">Licensing & Certification</option>
-            </select>
-          </div>
-
-          <!--
-            The search input lets users type a keyword.
-            placeholder= shows greyed-out hint text when the field is empty.
-            In script.js we read this value and check if it appears in
-            each regulation's text content.
-          -->
-          <div class="filter-group">
-            <label for="search-input">Keyword Search</label>
-            <input type="text" id="search-input" placeholder="e.g. PIPL, GDPR, cross-border...">
-          </div>
-
-          <!--
-            onclick="applyFilters()" calls a JavaScript function we define
-            in script.js. The browser runs that function when the button
-            is clicked.
-          -->
-          <div class="filter-group filter-btn-group">
-            <button onclick="applyFilters()" class="btn-search">Search</button>
-            <button onclick="clearFilters()" class="btn-clear">Clear</button>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── RESULTS ───────────────────────────────────────── -->
-    <section class="results-section">
-
-      <!--
-        This bar shows how many results are currently showing.
-        The id="results-count" lets script.js find this element
-        and update its text dynamically without reloading the page.
-      -->
-      <div class="results-meta">
-        <span id="results-count">Showing all regulations</span>
-      </div>
-
-      <!--
-        id="results-grid" is the container where result cards appear.
-        script.js reads all the regulation data and builds HTML cards
-        inside this div. It's empty in the HTML — JavaScript fills it.
-      -->
-      <div id="results-grid" class="results-grid">
-        <!-- Cards injected by script.js -->
-      </div>
-
-      <!--
-        This empty-state message shows when no results match the filters.
-        It starts hidden (display:none in CSS) and script.js shows it
-        when the results grid would be empty.
-      -->
-      <div id="empty-state" class="empty-state" style="display:none;">
-        <p>No regulations match your search. Try broadening your filters.</p>
-      </div>
-
-    </section>
-
-    <!-- ── DETAIL MODAL ──────────────────────────────────── -->
-    <!--
-      A modal is a pop-up overlay that appears on top of the page.
-      When a user clicks a regulation card, script.js fills this modal
-      with the full details of that regulation and makes it visible.
-      Clicking the backdrop or the × button closes it.
-
-      aria-modal and role="dialog" are accessibility attributes —
-      they tell screen readers this is a modal window.
-    -->
-    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()" aria-modal="true" role="dialog">
-      <!--
-        onclick="event.stopPropagation()" on the inner box prevents clicks
-        inside the modal from bubbling up to the overlay and closing it.
-        Without this, clicking anywhere inside would close the modal.
-      -->
-      <div class="modal-box" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeModal()">×</button>
-        <!--
-          id="modal-content" is where script.js injects the full
-          regulation details when a card is clicked.
-        -->
-        <div id="modal-content"></div>
-      </div>
+    <!-- Ambient jurisdiction names in background -->
+    <div class="ambient-words" aria-hidden="true">
+      <span class="aw aw-1">China</span>
+      <span class="aw aw-2">EU</span>
+      <span class="aw aw-3">GDPR</span>
+      <span class="aw aw-4">PIPL</span>
+      <span class="aw aw-5">USA</span>
+      <span class="aw aw-6">MENA</span>
+      <span class="aw aw-7">ASEAN</span>
+      <span class="aw aw-8">PDPA</span>
+      <span class="aw aw-9">AI Act</span>
+      <span class="aw aw-10">CCPA</span>
+      <span class="aw aw-11">DSL</span>
+      <span class="aw aw-12">NIS2</span>
     </div>
 
-  </main>
+    <div class="welcome-content">
+      <p class="welcome-eyebrow">HSITP Ecosystem Development Division</p>
+      <h1 class="welcome-title">
+        AI Compliance,<br>
+        <em>Without the Guesswork</em>
+      </h1>
+      <p class="welcome-sub">
+        A reference platform for navigating AI regulations across global markets.
+        Search by jurisdiction, regulatory theme, and country — built for organisations
+        operating across the US, China, Hong Kong, EU, and beyond.
+      </p>
+      <div class="welcome-meta">
+        <div class="meta-chip"><strong>8</strong> Regions</div>
+        <div class="meta-chip"><strong>4</strong> Themes</div>
+        <div class="meta-chip"><strong>25+</strong> Regulations</div>
+        <div class="meta-chip">Updated <strong>Aug 2026</strong></div>
+      </div>
+      <a href="#platform" class="btn-explore" id="explore-btn">
+        Explore Regulations
+        <span class="btn-arrow">↓</span>
+      </a>
+    </div>
 
-  <!-- ── FOOTER ───────────────────────────────────────────── -->
-  <footer>
-    <p>HSITP Ecosystem Development Division &nbsp;·&nbsp; Research current as of August 2026</p>
-    <p class="footer-note">This platform provides general informational guidance only and does not constitute legal advice.</p>
+    <div class="scroll-hint" aria-hidden="true">scroll</div>
+  </section>
+
+  <!-- ══ ABOUT STRIP ════════════════════════════════════════ -->
+  <section class="about-strip" id="about">
+    <div class="about-inner">
+      <div class="about-col">
+        <h3>What this platform covers</h3>
+        <p>Laws, regulations, and official guidance across four regulatory themes — data governance, algorithmic transparency, cross-border data flows, and licensing requirements — mapped to jurisdictions worldwide.</p>
+      </div>
+      <div class="about-col">
+        <h3>Who it is for</h3>
+        <p>Legal, compliance, and strategy teams at companies of any size seeking to understand the regulatory environment before entering new markets or deploying AI-powered products.</p>
+      </div>
+      <div class="about-col">
+        <h3>Important notice</h3>
+        <p>This platform provides general informational guidance only and does not constitute legal advice. Regulations change frequently — always verify against primary sources before making compliance decisions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MAIN PLATFORM ══════════════════════════════════════ -->
+  <section class="platform" id="platform">
+
+    <!-- ── SIDEBAR FILTERS ───────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">Filter Regulations</h2>
+          <button class="btn-clear-all" onclick="clearFilters()">Clear all</button>
+        </div>
+
+        <!-- KEYWORD SEARCH -->
+        <div class="filter-block">
+          <label class="filter-label" for="search-input">Keyword</label>
+          <div class="search-wrap">
+            <input
+              type="text"
+              id="search-input"
+              class="filter-input"
+              placeholder="e.g. PIPL, GDPR, cross-border…"
+            >
+            <span class="search-icon">⌕</span>
+          </div>
+        </div>
+
+        <!-- REGION → COUNTRY CASCADE -->
+        <div class="filter-block">
+          <label class="filter-label" for="region-filter">Region</label>
+          <select id="region-filter" class="filter-select" onchange="onRegionChange()">
+            <option value="">All regions</option>
+            <option value="china">Mainland China</option>
+            <option value="hongkong">Hong Kong SAR</option>
+            <option value="northamerica">North America</option>
+            <option value="eu">European Union</option>
+            <option value="uk">United Kingdom</option>
+            <option value="mena">MENA</option>
+            <option value="sea">South & Southeast Asia</option>
+            <option value="anz">Australia & New Zealand</option>
+          </select>
+        </div>
+
+        <!--
+          Country dropdown — hidden until a region is selected.
+          onRegionChange() populates and shows this.
+        -->
+        <div class="filter-block" id="country-block" style="display:none;">
+          <label class="filter-label" for="country-filter">Country</label>
+          <select id="country-filter" class="filter-select">
+            <option value="">All countries</option>
+          </select>
+        </div>
+
+        <!-- THEME -->
+        <div class="filter-block">
+          <label class="filter-label">Regulatory Theme</label>
+          <div class="theme-pills" id="theme-pills">
+            <button class="theme-pill active" data-theme="" onclick="selectTheme(this)">All</button>
+            <button class="theme-pill" data-theme="data" onclick="selectTheme(this)">Data Governance</button>
+            <button class="theme-pill" data-theme="crossborder" onclick="selectTheme(this)">Cross-Border Flows</button>
+            <button class="theme-pill" data-theme="transparency" onclick="selectTheme(this)">Algorithmic Transparency</button>
+            <button class="theme-pill" data-theme="licensing" onclick="selectTheme(this)">Licensing & Certification</button>
+          </div>
+        </div>
+
+        <button class="btn-apply" onclick="applyFilters()">Apply Filters</button>
+
+      </div>
+    </aside>
+
+    <!-- ── RESULTS AREA ───────────────────────────────────── -->
+    <main class="results-area">
+
+      <div class="results-topbar">
+        <span id="results-count" class="results-count">Showing all regulations</span>
+        <div class="sort-wrap">
+          <label for="sort-select" class="sort-label">Sort by</label>
+          <select id="sort-select" class="sort-select" onchange="applyFilters()">
+            <option value="default">Default</option>
+            <option value="az">A – Z</option>
+            <option value="recent">Most recent</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active filter tags row -->
+      <div id="active-tags" class="active-tags"></div>
+
+      <div id="results-grid" class="results-grid"></div>
+
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <p class="empty-title">No regulations found</p>
+        <p class="empty-sub">Try broadening your filters or clearing the keyword search.</p>
+        <button class="btn-apply" onclick="clearFilters()" style="margin-top:16px;">Clear filters</button>
+      </div>
+
+    </main>
+  </section>
+
+  <!-- ══ DETAIL MODAL ═══════════════════════════════════════ -->
+  <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+    <div class="modal-box" onclick="event.stopPropagation()" role="dialog" aria-modal="true">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-logo">HSITP AI Compliance Platform</span>
+        <span class="footer-divider">·</span>
+        <span>Ecosystem Development Division</span>
+      </div>
+      <div class="footer-right">
+        <span>Content current as of August 2026</span>
+        <span class="footer-divider">·</span>
+        <span>Not legal advice</span>
+      </div>
+    </div>
   </footer>
 
-  <!--
-    <script> is placed at the bottom of <body> — NOT in <head>.
-    This is important: the browser reads HTML top to bottom.
-    If we put the script in <head>, it would run before the HTML elements
-    (like the results grid) exist yet, and JavaScript would fail to find them.
-    Placing it at the bottom ensures all HTML is loaded before JS runs.
-  -->
   <script src="script.js"></script>
-
 </body>
 </html>
 

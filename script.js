@@ -1,567 +1,676 @@
-/*
-  ══════════════════════════════════════════════════════════════
-  THE REGULATIONS DATABASE
-  ══════════════════════════════════════════════════════════════
-  This is a JavaScript array — a list of objects.
-  Each object {} represents one regulation and has the same
-  set of properties (keys) so we can treat them consistently.
+/* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ════════════════════════════════════════════════════════════ */
+:root {
+  --blue:        #2563EB;
+  --blue-mid:    #3B82F6;
+  --blue-light:  #DBEAFE;
+  --blue-xlight: #EFF6FF;
+  --ink:         #0F172A;
+  --ink-mid:     #334155;
+  --ink-light:   #64748B;
+  --rule:        #E2E8F0;
+  --surface:     #F8FAFC;
+  --white:       #FFFFFF;
 
-  Think of it like a spreadsheet:
-  - Each object = one row
-  - Each property (id, title, jurisdiction...) = one column
+  /* Theme colours */
+  --c-data:         #0369A1; --c-data-bg:         #E0F2FE;
+  --c-crossborder:  #6D28D9; --c-crossborder-bg:  #EDE9FE;
+  --c-transparency: #0F766E; --c-transparency-bg: #CCFBF1;
+  --c-licensing:    #B45309; --c-licensing-bg:    #FEF3C7;
 
-  In a full production app this data would come from a real database
-  on a server. For now, it lives here in the JavaScript file.
-  Adding a new regulation = adding a new object to this array.
-*/
-const regulations = [
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --radius:       10px;
+  --radius-sm:    6px;
+  --shadow:       0 1px 4px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg:    0 8px 32px rgba(0,0,0,0.14);
 
-  // ── MAINLAND CHINA ────────────────────────────────────
-  {
-    id: 1,
-    title: "Personal Information Protection Law (PIPL)",
-    jurisdiction: "china",
-    jurisdictionLabel: "Mainland China",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "1 November 2021",
-    summary: "China's first comprehensive national-level personal information law. Governs collection, storage, use, and cross-border transfer of personal data. Has extraterritorial reach — applies to any organisation handling data of persons located in China, regardless of where the company is incorporated.",
-    keyRequirements: "Organisations must have a lawful basis for processing. Cross-border transfers require one of three mechanisms: CAC security assessment, professional certification, or standard contractual clauses. Security assessment is mandatory for transfers involving more than 100,000 individuals' personal information or more than 10,000 individuals' sensitive personal information.",
-    startupImplication: "HSITP startups building AI products that process data of mainland China users — regardless of where the company is based — must comply. Cross-border data flows between HSITP (Hong Kong) and mainland China operations are directly regulated.",
-    source: "NPC Official English Reference Text",
-    sourceUrl: "http://en.npc.gov.cn.cdurl.cn/2021-12/29/c_694559.htm"
-  },
-  {
-    id: 2,
-    title: "Data Security Law (DSL)",
-    jurisdiction: "china",
-    jurisdictionLabel: "Mainland China",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "1 September 2021",
-    summary: "Establishes a national data classification and graded protection system. Introduces 'important data' and 'national core data' categories subject to strict controls and export restrictions. Primarily focused on national security dimensions of data governance.",
-    keyRequirements: "Organisations must assess whether their data qualifies as 'important data'. Stricter security requirements and potential export restrictions apply to important data. Works alongside PIPL and the 2017 Cybersecurity Law.",
-    startupImplication: "AI startups whose systems process large volumes of industry-specific or government-adjacent data should assess whether that data could be classified as 'important data' under DSL — a broad and administratively defined category.",
-    source: "China Law Translate — Unofficial English Translation",
-    sourceUrl: "https://www.chinalawtranslate.com/en/datasecuritylaw/"
-  },
-  {
-    id: 3,
-    title: "Provisions on Algorithm Recommendation",
-    jurisdiction: "china",
-    jurisdictionLabel: "Mainland China",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "1 March 2022",
-    summary: "One of the world's first binding AI-specific transparency regulations. Applies to internet information service providers using recommendation algorithms in China. Creates a mandatory government algorithm registration (filing) system for services with 'public opinion or social mobilisation' properties.",
-    keyRequirements: "Providers must disclose to users that they are subject to algorithmic recommendations. Users have the right to opt out of personalised recommendations. Services reaching the public opinion threshold must register their algorithms with the CAC via a mandatory filing system. Internal ethics reviews and security assessments are required.",
-    startupImplication: "Any startup operating a content, news, social, or recommendation platform in China — including AI-powered search or personalisation features — is likely subject to registration obligations.",
-    source: "Regulations.AI — Algorithm Recommendation Provisions",
-    sourceUrl: "https://regulations.ai/regulations/RAI-CN-NA-PAARIXX-2021"
-  },
-  {
-    id: 4,
-    title: "Interim Measures for Generative AI Services",
-    jurisdiction: "china",
-    jurisdictionLabel: "Mainland China",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "15 August 2023",
-    summary: "China's first binding regulation specifically on generative AI — among the earliest globally. Jointly issued by 7 ministries. Applies to any provider offering generative AI services (text, image, audio, video) to the public within China.",
-    keyRequirements: "AI-generated content must be disclosed to users. Training data sources and algorithmic mechanisms must be explained to regulators on request. Content labelling is mandatory. Training data must be lawfully sourced. Content safety regime applies — generated content must not violate Chinese law. Providers must file with the CAC.",
-    startupImplication: "Critical for any startup building on or integrating LLMs, image generators, or other generative AI for the Chinese market. CAC filing is required before offering services publicly.",
-    source: "Digital Watch Observatory — Full English Translation",
-    sourceUrl: "https://dig.watch/resource/interim-measures-for-the-administration-of-generative-artificial-intelligence-services"
-  },
-  {
-    id: 5,
-    title: "Algorithm Registry (CAC Filing System)",
-    jurisdiction: "china",
-    jurisdictionLabel: "Mainland China",
-    theme: "licensing",
-    themeLabel: "Licensing & Certification",
-    effectiveDate: "August 2022 (ongoing)",
-    summary: "The operational output of China's mandatory algorithm registration system, created under the 2022 Algorithm Recommendation Provisions. One of the world's first functioning AI licensing mechanisms — providers must register with the CAC before or shortly after public deployment if their systems reach the public opinion threshold.",
-    keyRequirements: "Registration requires disclosure of the algorithm's name, purpose, application product, and operational details. Separate registration tracks exist for recommendation algorithms and deep synthesis (deepfake) algorithms. As of early 2026, 796 generative AI services and 481 deep synthesis applications had been registered.",
-    startupImplication: "Startups should assess at product design stage whether their AI system will meet the public opinion or social mobilisation threshold. Registration before deployment is strongly advisable.",
-    source: "Carnegie Endowment — Analysis of China's Algorithm Registry",
-    sourceUrl: "https://carnegieendowment.org/posts/2022/12/what-chinas-algorithm-registry-reveals-about-ai-governance?lang=en"
-  },
+  --sidebar-w: 280px;
+  --header-h:  56px;
+}
 
-  // ── HONG KONG SAR ─────────────────────────────────────
-  {
-    id: 6,
-    title: "Personal Data (Privacy) Ordinance (PDPO)",
-    jurisdiction: "hongkong",
-    jurisdictionLabel: "Hong Kong SAR",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "December 1996 (amended 2021)",
-    summary: "Hong Kong's primary data protection statute — one of Asia's earliest comprehensive data privacy laws. Governs collection, holding, and use of personal data through six Data Protection Principles (DPPs). Operates independently of China's PIPL under 'One Country, Two Systems'. 2021 amendments strengthened enforcement powers.",
-    keyRequirements: "Six Data Protection Principles govern purpose limitation, data accuracy and retention, use limitation, data security, openness, and individual access rights. The Privacy Commissioner (PCPD) enforces compliance. Anti-doxxing criminal offences introduced in 2021 carry penalties up to HK$1 million and 5 years imprisonment.",
-    startupImplication: "HSITP startups are in Hong Kong's jurisdiction by default. Dual compliance is required for companies operating on both sides of the boundary — PDPO and PIPL operate independently. No automatic equivalence between the two regimes.",
-    source: "PCPD — PDPO at a Glance (Official)",
-    sourceUrl: "https://www.pcpd.org.hk/english/data_privacy_law/ordinance_at_a_Glance/ordinance.html"
-  },
-  {
-    id: 7,
-    title: "PCPD Model AI Data Protection Framework",
-    jurisdiction: "hongkong",
-    jurisdictionLabel: "Hong Kong SAR",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "June 2024",
-    summary: "Voluntary framework from the Office of the Privacy Commissioner for Personal Data providing practical guidance on AI governance, risk assessment, and stakeholder transparency. Part of the Global AI Governance Initiative. Directly addresses the intersection of the PDPO and AI deployment.",
-    keyRequirements: "Guidance covers: establishing AI governance strategies; conducting AI-specific risk assessments; managing AI models securely; ensuring transparency with data subjects about AI use; and maintaining human oversight. Not legally binding but expected by the PCPD as best practice.",
-    startupImplication: "Startups deploying AI that processes Hong Kong residents' personal data should follow this framework as a de facto compliance baseline — even though it is currently voluntary.",
-    source: "PCPD — PDPO and Mainland PIPL Comparative Overview",
-    sourceUrl: "https://www.pcpd.org.hk/english/data_privacy_law/mainland_law/mainland_law.html"
-  },
+/* ════════════════════════════════════════════════════════════
+   RESET
+   ════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink-mid);
+  background: var(--surface);
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: var(--font-body); }
+select, input { font-family: var(--font-body); }
 
-  // ── UNITED STATES ─────────────────────────────────────
-  {
-    id: 8,
-    title: "CCPA / CPRA Automated Decision-Making (ADMT) Regulations",
-    jurisdiction: "usa",
-    jurisdictionLabel: "United States",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "Operative 1 January 2026; ADMT requirements from 1 January 2027",
-    summary: "California's most significant AI-specific regulation. Issued by the California Privacy Protection Agency under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA). Requires businesses to provide transparency and opt-out rights for automated decision-making that produces significant decisions about consumers.",
-    keyRequirements: "Pre-use notices required when ADMT is used for significant decisions (employment, credit, housing, education, healthcare). Consumers have the right to opt out and request access to the logic behind decisions. Applies to for-profit businesses in California with annual revenue over US$25 million, or handling data of 100,000+ California residents.",
-    startupImplication: "Any HSITP startup targeting US consumers with an AI product making significant decisions will likely meet the thresholds at meaningful scale. Compliance should be designed into products from the start, not retrofitted.",
-    source: "FLAS Law — CCPA/CPRA ADMT Regulations Summary",
-    sourceUrl: "https://flasllp.com/california-ai-privacy-laws-regulating-automated-decision-making-technology/"
-  },
-  {
-    id: 9,
-    title: "NIST AI Risk Management Framework (AI RMF 1.0)",
-    jurisdiction: "usa",
-    jurisdictionLabel: "United States",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "26 January 2023",
-    summary: "The US government's primary voluntary framework for managing AI risk. Organised around four functions: Govern, Map, Measure, and Manage. Identifies explainability and transparency as core trustworthiness characteristics. Voluntary but used as de facto compliance reference for federal procurement and sector regulatory guidance.",
-    keyRequirements: "Organisations should identify AI risks (Map), analyse them (Measure), govern their response (Govern), and operationalise risk management (Manage). Companion AI RMF Playbook provides concrete actions. A Generative AI Profile (NIST AI 600-1) was released in July 2024.",
-    startupImplication: "While voluntary, alignment with the AI RMF is increasingly expected by US federal agency customers and regulated industry partners. Useful as a governance framework to implement alongside mandatory requirements.",
-    source: "NIST — AI Risk Management Framework 1.0 (Official)",
-    sourceUrl: "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10"
-  },
+/* ════════════════════════════════════════════════════════════
+   STICKY HEADER
+   ════════════════════════════════════════════════════════════ */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+.logo-hsitp { letter-spacing: 0.04em; }
+.logo-pill {
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+.logo-rest { color: var(--ink-light); font-weight: 500; }
+.header-nav { display: flex; gap: 24px; }
+.nav-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-light);
+  transition: color 0.15s;
+}
+.nav-link:hover { color: var(--blue); }
 
-  // ── EUROPEAN UNION ────────────────────────────────────
-  {
-    id: 10,
-    title: "EU AI Act (Regulation (EU) 2024/1689)",
-    jurisdiction: "eu",
-    jurisdictionLabel: "European Union",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "In force 1 August 2024; transparency provisions applicable 2 August 2026",
-    summary: "The world's first comprehensive horizontal AI law. Takes a risk-based approach classifying AI into prohibited practices, high-risk AI, limited-risk AI, and minimal-risk AI. Imposes transparency obligations on generative AI providers and stringent conformity assessment requirements for high-risk AI systems.",
-    keyRequirements: "High-risk AI systems must be transparent and provide technical documentation. Article 50: chatbots must disclose their artificial nature; AI-generated content must be identifiable; deepfakes must be labelled. GPAI models above 10^25 FLOPS face additional systemic risk obligations including model evaluations. Fines up to €35 million or 7% of global turnover.",
-    startupImplication: "Any startup selling AI products to EU customers or with EU operations must map their systems to the AI Act's risk tiers. The conformity assessment and registration requirements for high-risk AI create significant pre-deployment compliance obligations.",
-    source: "European Commission — EU AI Act Official Overview",
-    sourceUrl: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai"
-  },
-  {
-    id: 11,
-    title: "EU AI Act — Conformity Assessment & Registration",
-    jurisdiction: "eu",
-    jurisdictionLabel: "European Union",
-    theme: "licensing",
-    themeLabel: "Licensing & Certification",
-    effectiveDate: "Phased: 2024–2027 depending on risk tier",
-    summary: "High-risk AI systems must undergo conformity assessment before market placement — either self-assessment or third-party assessment depending on the system category. High-risk AI must be registered in the EU's public database. GPAI models with systemic risk face additional evaluation and testing requirements.",
-    keyRequirements: "Conformity assessment must be completed before deployment. Technical documentation, logging capabilities, and instructions for use are required for high-risk systems. The EU AI Office (established 2024) supervises GPAI models. National authorities enforce across EU member states.",
-    startupImplication: "Startups whose AI products fall into high-risk categories (hiring tools, credit scoring, safety systems, biometric identification, etc.) face mandatory certification before entering the EU market.",
-    source: "EU AI Act Explorer — Article 13 Transparency Obligations",
-    sourceUrl: "https://artificialintelligenceact.eu/article/13/"
-  },
+/* ════════════════════════════════════════════════════════════
+   WELCOME PAGE
+   Fills exactly the viewport. Ambient words float in background.
+   ════════════════════════════════════════════════════════════ */
+.welcome {
+  min-height: 100vh;
+  /* Deep navy → rich blue gradient — distinct from generic tech blues */
+  background: linear-gradient(145deg, #0A1628 0%, #0F2D5E 45%, #1A4B8C 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: var(--header-h);
+}
 
-  // ── UNITED KINGDOM ────────────────────────────────────
-  {
-    id: 12,
-    title: "ICO Guidance on AI and Data Protection",
-    jurisdiction: "uk",
-    jurisdictionLabel: "United Kingdom",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "Updated 15 March 2023",
-    summary: "The UK Information Commissioner's Office's primary guidance clarifying how UK GDPR applies to AI systems that process personal data. Part of the UK's pro-innovation, principles-based regulatory approach which relies on existing sector regulators rather than new AI-specific legislation.",
-    keyRequirements: "AI systems processing personal data must comply with UK GDPR: lawful basis, fairness and transparency, purpose limitation, data minimisation, accuracy, storage limitation, security, and accountability. Automated decision-making provisions (Article 22 equivalent) apply to significant AI-driven decisions.",
-    startupImplication: "The UK has no bespoke AI Act. Compliance with UK GDPR, as interpreted through ICO guidance, is the primary AI compliance obligation for startups in the UK market. Proactive engagement with the ICO's guidance reduces enforcement risk.",
-    source: "ICO — Guidance on AI and Data Protection (Official)",
-    sourceUrl: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/"
-  },
+/* Ambient background words — signature design element */
+.ambient-words {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.aw {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 5rem);
+  color: rgba(255,255,255,0.04);
+  font-style: italic;
+  white-space: nowrap;
+  /* Each word placed manually for a deliberate, non-scattered feel */
+}
+.aw-1  { top:  8%; left:  5%; font-size: 6rem; }
+.aw-2  { top: 15%; right: 8%; font-size: 9rem; }
+.aw-3  { top: 38%; left:  2%; font-size: 4rem; }
+.aw-4  { top: 60%; left: 12%; font-size: 7rem; }
+.aw-5  { top: 72%; right: 5%; font-size: 5rem; }
+.aw-6  { top: 25%; left: 35%; font-size: 3.5rem; opacity: 0.03; }
+.aw-7  { top: 80%; left: 40%; font-size: 4.5rem; }
+.aw-8  { top:  5%; left: 55%; font-size: 3rem; }
+.aw-9  { top: 48%; right: 3%; font-size: 8rem; }
+.aw-10 { top: 85%; left:  2%; font-size: 3.5rem; }
+.aw-11 { top: 30%; right: 22%; font-size: 5rem; }
+.aw-12 { top: 65%; right: 28%; font-size: 3rem; }
 
-  // ── MENA ──────────────────────────────────────────────
-  {
-    id: 13,
-    title: "UAE Personal Data Protection Law (PDPL)",
-    jurisdiction: "mena",
-    jurisdictionLabel: "MENA — UAE",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "2 January 2022",
-    summary: "UAE's federal personal data protection law governing data processing by organisations operating in or targeting residents of the UAE. Coexists with separate GDPR-aligned frameworks in the DIFC and ADGM free zones. The DIFC uniquely amended its regulations in 2023 to specifically regulate AI-related data processing (Regulation 10).",
-    keyRequirements: "Lawful basis required for processing. Cross-border data transfers must meet conditions set by the UAE Data Office. Financial free zone companies (DIFC, ADGM) face separate obligations. UAE AI Charter (June 2024) sets 12 voluntary ethical principles including transparency and human oversight.",
-    startupImplication: "Companies licensed in DIFC or ADGM face different (often stricter) obligations than those operating onshore. Startups should determine which regulatory perimeter applies before establishing UAE operations.",
-    source: "Modulos — Middle East AI Compliance Guide",
-    sourceUrl: "https://www.modulos.ai/middle-east-ai-regulations/"
-  },
-  {
-    id: 14,
-    title: "Saudi Arabia Personal Data Protection Law (PDPL)",
-    jurisdiction: "mena",
-    jurisdictionLabel: "MENA — Saudi Arabia",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "Enforced 14 September 2024",
-    summary: "One of the most comprehensive and sovereignty-driven data protection laws in MENA. Enforced by SDAIA — uniquely the same body responsible for Saudi Arabia's AI strategy. Imposes strict data localisation requirements and prior approval requirements for cross-border data transfers.",
-    keyRequirements: "Personal data must generally remain within the Kingdom. Cross-border transfers require prior SDAIA approval under specific conditions. SDAIA is authorised to set governance standards and assess AI risks across data and AI domains as part of Vision 2030.",
-    startupImplication: "Data localisation is the most significant operational constraint for AI startups in the Saudi market. Cloud infrastructure decisions must account for KSA residency requirements before deployment.",
-    source: "Data Privacy Manager — MENA Data Protection Overview",
-    sourceUrl: "https://dataprivacymanager.net/how-the-middle-east-is-defining-the-next-wave-of-data-privacy/"
-  },
+.welcome-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 720px;
+  padding: 40px 32px;
+}
+.welcome-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 20px;
+}
+.welcome-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+.welcome-title em {
+  font-style: italic;
+  /* Slight gold tint on the italic line — warm contrast against the blue */
+  color: #93C5FD;
+}
+.welcome-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  max-width: 540px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+.welcome-meta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.meta-chip {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: 5px 16px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.85);
+}
+.meta-chip strong { color: #fff; }
 
-  // ── SOUTH & SOUTHEAST ASIA ────────────────────────────
-  {
-    id: 15,
-    title: "Singapore PDPA + PDPC AI Advisory Guidelines",
-    jurisdiction: "sea",
-    jurisdictionLabel: "South & Southeast Asia — Singapore",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "PDPA 2012 (amended 2024); AI Guidelines 1 March 2024",
-    summary: "Singapore's Personal Data Protection Act (PDPA) governs personal data handling and applies throughout the AI lifecycle. The 2024 amendments add data processor obligations and enhanced breach notification. The PDPC's March 2024 Advisory Guidelines specifically address AI recommendation and decision systems.",
-    keyRequirements: "Consent, notification, and accountability obligations apply to AI systems handling personal data. The Advisory Guidelines require a risk-based approach: higher-risk AI decisions require stronger transparency and governance. Cross-border transfers must meet binding transfer limitation obligations; ASEAN Model Contractual Clauses are recognised.",
-    startupImplication: "Singapore is Southeast Asia's most developed compliance environment and a natural entry point for the region. PDPA compliance provides a strong foundation for expansion to other ASEAN markets.",
-    source: "Chambers and Partners — Singapore Data Protection & Privacy 2026",
-    sourceUrl: "https://practiceguides.chambers.com/practice-guides/data-protection-privacy-2026/singapore/trends-and-developments"
-  },
-  {
-    id: 16,
-    title: "Singapore Model AI Governance Framework",
-    jurisdiction: "sea",
-    jurisdictionLabel: "South & Southeast Asia — Singapore",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "Updated January 2024 (GenAI & Agentic AI extensions)",
-    summary: "Singapore's voluntary AI governance framework developed by IMDA, providing detailed guidance on accountability, human oversight, explainability, and operational governance. Updated in 2024 with Generative AI and Agentic AI extensions. The AI Verify Foundation provides testing and certification tools to demonstrate compliance.",
-    keyRequirements: "Framework covers nine dimensions including accountability, data, trusted development, incident reporting, testing and assurance, security, content provenance, safety research, and AI for public good. Voluntary but increasingly expected by enterprise customers and sector regulators.",
-    startupImplication: "Alignment with the Model AI Governance Framework is effectively expected for any startup seeking enterprise sales or government contracts in Singapore. It also maps to international frameworks (EU AI Act, NIST RMF), reducing the cost of multi-jurisdictional compliance.",
-    source: "Pertama Partners — Singapore Model AI Governance Framework (2026)",
-    sourceUrl: "https://www.pertamapartners.com/insights/singapore-model-ai-governance-framework-genai-agentic"
-  },
-  {
-    id: 17,
-    title: "ASEAN Guide on AI Governance and Ethics",
-    jurisdiction: "sea",
-    jurisdictionLabel: "South & Southeast Asia — ASEAN",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "February 2024 (GenAI extension January 2025)",
-    summary: "Regional voluntary AI governance guide for all 10 ASEAN member states. Provides a common framework for AI design, development, and deployment. Enhanced in January 2025 with a Generative AI guide. Draws heavily on Singapore's Model AI Governance Framework.",
-    keyRequirements: "Nine governance dimensions: accountability, data, trusted development and deployment, incident reporting, testing and assurance, security, content provenance, safety and alignment R&D, and AI for public good. Explicitly light-touch and voluntary.",
-    startupImplication: "Startups targeting multiple Southeast Asian markets simultaneously can use the ASEAN Guide as a regional baseline, reducing duplication of compliance work across member states.",
-    source: "RPC Legal — AI Regulation in Asia: Part 4",
-    sourceUrl: "https://www.rpclegal.com/thinking/artificial-intelligence/ai-guide/part-4-ai-regulation-in-asia/"
-  },
+.btn-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 999px;
+  border: none;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.btn-explore:hover { background: var(--blue-mid); transform: translateY(-1px); }
+.btn-arrow {
+  font-size: 1.1rem;
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(4px); }
+}
 
-  // ── AUSTRALIA & NEW ZEALAND ───────────────────────────
-  {
-    id: 18,
-    title: "Australia — Privacy Act 2024 ADMT Transparency Obligations",
-    jurisdiction: "anz",
-    jurisdictionLabel: "Australia & New Zealand",
-    theme: "transparency",
-    themeLabel: "Algorithmic Transparency & Explainability",
-    effectiveDate: "10 December 2026",
-    summary: "The Privacy and Other Legislation Amendment Act 2024 introduces mandatory transparency obligations for Australian Privacy Principle (APP) entities that use substantially automated decision-making with personal information where the outcome could significantly affect individuals' rights or interests. This is Australia's most concrete step toward binding AI-specific requirements.",
-    keyRequirements: "APP entities must disclose in their privacy policy when personal information is used in substantially automated decisions that significantly affect individuals (loan approvals, insurance pricing, hiring screening, etc.). Disclosures must be specific — generic statements are insufficient. Human oversight in the decision loop does not automatically exempt an organisation.",
-    startupImplication: "Startups in Australia or with Australian customers should review their AI systems now and map which decisions are substantially automated. Privacy policies need updating before December 2026.",
-    source: "Landers & Rogers — Australian Privacy Law Update 2026",
-    sourceUrl: "https://landers.com.au/legal-insights-news/australian-privacy-law-update-what-app-entities-need-to-know-in-2026"
-  },
-  {
-    id: 19,
-    title: "New Zealand — Privacy Act 2020 AI Guidance",
-    jurisdiction: "anz",
-    jurisdictionLabel: "Australia & New Zealand",
-    theme: "data",
-    themeLabel: "Data Governance & Cross-Border Flows",
-    effectiveDate: "OPC AI Guidance published 21 September 2023",
-    summary: "New Zealand's Privacy Act 2020 and its 13 Information Privacy Principles (IPPs) apply to the full AI lifecycle. The Office of the Privacy Commissioner (OPC) published detailed AI guidance in September 2023 clarifying compliance expectations. New Zealand has adopted a 'light-touch, principles-based' AI strategy (2025), relying on existing laws rather than dedicated AI legislation.",
-    keyRequirements: "Organisations using AI must: secure senior leadership approval; conduct Privacy Impact Assessments; carry out Algorithmic Impact Assessments (AIAs); be transparent with individuals about AI use; engage with Māori and affected communities; ensure human review for decisions affecting individuals.",
-    startupImplication: "New Zealand's light-touch posture makes it one of the more accessible regulatory environments for AI startups. However, OPC enforcement is active — proactive compliance documentation is advisable.",
-    source: "Regulations.AI — NZ OPC AI Guidance Overview",
-    sourceUrl: "https://regulations.ai/regulations/RAI-NZ-NA-OPCGUXX-2023"
+.scroll-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ABOUT STRIP
+   ════════════════════════════════════════════════════════════ */
+.about-strip {
+  background: var(--ink);
+  padding: 48px 32px;
+}
+.about-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.about-col h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+.about-col p {
+  font-size: 0.87rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+}
+
+/* ════════════════════════════════════════════════════════════
+   PLATFORM — SIDEBAR + RESULTS LAYOUT
+   ════════════════════════════════════════════════════════════ */
+.platform {
+  display: flex;
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 48px;
+  gap: 0;
+  align-items: flex-start;
+}
+
+/* ── SIDEBAR ───────────────────────────────────────────────  */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  /* Sticks as user scrolls through results */
+  position: sticky;
+  top: calc(var(--header-h) + 24px);
+  max-height: calc(100vh - var(--header-h) - 48px);
+  overflow-y: auto;
+  padding: 0 0 40px 32px;
+}
+/* Thin custom scrollbar on sidebar */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+.sidebar-inner {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.sidebar-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.btn-clear-all {
+  font-size: 0.75rem;
+  color: var(--blue);
+  background: none;
+  border: none;
+  font-weight: 600;
+  padding: 0;
+}
+.btn-clear-all:hover { text-decoration: underline; }
+
+.filter-block { margin-bottom: 20px; }
+.filter-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-light);
+  margin-bottom: 8px;
+}
+.search-wrap { position: relative; }
+.filter-input {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  font-size: 0.87rem;
+  color: var(--ink);
+  background: var(--surface);
+  transition: border-color 0.15s;
+}
+.filter-input:focus { outline: none; border-color: var(--blue); }
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: var(--ink-light);
+  pointer-events: none;
+}
+.filter-select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  font-size: 0.87rem;
+  color: var(--ink);
+  background: var(--surface);
+  appearance: none;
+  /* Custom caret */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.filter-select:focus { outline: none; border-color: var(--blue); }
+
+/* Theme pills — each theme gets its own coloured pill */
+.theme-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.theme-pill {
+  text-align: left;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--rule);
+  background: var(--white);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-mid);
+  transition: all 0.15s;
+}
+.theme-pill:hover { border-color: var(--blue); color: var(--blue); }
+.theme-pill.active {
+  background: var(--blue-xlight);
+  border-color: var(--blue-light);
+  color: var(--blue);
+  font-weight: 600;
+}
+/* Theme-specific active colours */
+.theme-pill[data-theme="data"].active         { background: var(--c-data-bg);         border-color: #BAE6FD; color: var(--c-data); }
+.theme-pill[data-theme="crossborder"].active   { background: var(--c-crossborder-bg);   border-color: #C4B5FD; color: var(--c-crossborder); }
+.theme-pill[data-theme="transparency"].active  { background: var(--c-transparency-bg);  border-color: #99F6E4; color: var(--c-transparency); }
+.theme-pill[data-theme="licensing"].active     { background: var(--c-licensing-bg);     border-color: #FDE68A; color: var(--c-licensing); }
+
+.btn-apply {
+  width: 100%;
+  padding: 10px 0;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: background 0.15s;
+  margin-top: 4px;
+}
+.btn-apply:hover { background: var(--blue-mid); }
+
+/* ── RESULTS AREA ──────────────────────────────────────────  */
+.results-area {
+  flex: 1;
+  min-width: 0;
+  padding: 0 32px 60px;
+}
+.results-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.results-count {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  font-weight: 500;
+}
+.sort-wrap { display: flex; align-items: center; gap: 8px; }
+.sort-label { font-size: 0.8rem; color: var(--ink-light); }
+.sort-select {
+  padding: 5px 28px 5px 10px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: var(--white);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+}
+.sort-select:focus { outline: none; }
+
+/* Active filter tags */
+.active-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  min-height: 0;
+}
+.active-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue-xlight);
+  border: 1px solid var(--blue-light);
+  border-radius: 999px;
+  padding: 3px 10px 3px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--blue);
+}
+.tag-remove {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.7;
+}
+.tag-remove:hover { opacity: 1; }
+
+/* ── CARDS GRID ────────────────────────────────────────────  */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.reg-card {
+  background: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  display: flex;
+  flex-direction: column;
+}
+.reg-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue-light);
+}
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card-title {
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--ink);
+  line-height: 1.4;
+  flex: 1;
+}
+.jurisdiction-tag {
+  background: var(--blue-xlight);
+  color: var(--blue);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.theme-tag {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.theme-tag.data         { background: var(--c-data-bg);         color: var(--c-data); }
+.theme-tag.crossborder  { background: var(--c-crossborder-bg);  color: var(--c-crossborder); }
+.theme-tag.transparency { background: var(--c-transparency-bg); color: var(--c-transparency); }
+.theme-tag.licensing    { background: var(--c-licensing-bg);    color: var(--c-licensing); }
+
+.card-summary {
+  font-size: 0.84rem;
+  color: var(--ink-light);
+  line-height: 1.55;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+.effective-date { font-size: 0.73rem; color: var(--ink-light); }
+.card-cta { font-size: 0.75rem; font-weight: 700; color: var(--blue); }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+}
+.empty-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--ink); margin-bottom: 8px; }
+.empty-sub   { font-size: 0.88rem; color: var(--ink-light); }
+
+/* ════════════════════════════════════════════════════════════
+   MODAL
+   ════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,22,40,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  padding: 24px;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+  background: var(--white);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 40px 44px;
+  position: relative;
+}
+.modal-box::-webkit-scrollbar { width: 4px; }
+.modal-box::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+.modal-close {
+  position: absolute;
+  top: 18px; right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  font-size: 1.2rem;
+  color: var(--ink-light);
+  line-height: 1;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--rule); }
+
+.modal-region   { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); margin-bottom: 6px; }
+.modal-title    { font-family: var(--font-display); font-size: 1.6rem; color: var(--ink); margin-bottom: 16px; line-height: 1.25; }
+.modal-section  { margin-bottom: 20px; }
+.modal-section h3 { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-light); margin-bottom: 6px; }
+.modal-section p  { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.7; }
+.modal-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--blue);
+  font-size: 0.86rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--blue-light);
+  transition: border-color 0.15s;
+}
+.modal-link:hover { border-color: var(--blue); }
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════════════════════════ */
+.site-footer {
+  background: var(--ink);
+  padding: 20px 32px;
+}
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-left, .footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+}
+.footer-logo { color: rgba(255,255,255,0.7); font-weight: 600; }
+.footer-divider { opacity: 0.3; }
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .platform { flex-direction: column; padding-top: 24px; }
+  .sidebar {
+    width: 100%;
+    position: static;
+    max-height: none;
+    padding: 0 16px;
+    overflow: visible;
   }
-
-]; // end of regulations array
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  THEME LABEL MAPPING
-  ══════════════════════════════════════════════════════════════
-  A simple lookup object. Given a theme key (e.g. "data"),
-  it returns the display label and CSS class.
-  This saves us repeating the same if/else logic in multiple places.
-*/
-const themeConfig = {
-  data:         { label: "Data Governance",       cssClass: "data" },
-  transparency: { label: "Algorithmic Transparency", cssClass: "transparency" },
-  licensing:    { label: "Licensing & Certification", cssClass: "licensing" }
-};
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  buildCard(regulation)
-  ══════════════════════════════════════════════════════════════
-  This function takes one regulation object and returns
-  a string of HTML representing a card.
-
-  Template literals (backtick strings) let us embed variables
-  directly using ${variable} syntax — much cleaner than
-  concatenating strings with + signs.
-*/
-function buildCard(reg) {
-  const theme = themeConfig[reg.theme];
-  return `
-    <div class="reg-card" onclick="openModal(${reg.id})">
-      <div class="card-top">
-        <div class="card-title">${reg.title}</div>
-        <div class="jurisdiction-tag">${reg.jurisdictionLabel}</div>
-      </div>
-      <div class="theme-tag ${theme.cssClass}">${theme.label}</div>
-      <p class="card-summary">${reg.summary}</p>
-      <div class="card-footer">
-        <span class="effective-date">Effective: ${reg.effectiveDate}</span>
-        <span class="card-cta">View details →</span>
-      </div>
-    </div>
-  `;
+  .results-area { padding: 0 16px 40px; }
+  .about-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 600px) {
+  .welcome-title { font-size: 2.2rem; }
+  .header-inner { padding: 0 16px; }
+  .logo-rest { display: none; }
+  .modal-box { padding: 28px 20px; }
 }
 
 
-/*
-  ══════════════════════════════════════════════════════════════
-  renderCards(list)
-  ══════════════════════════════════════════════════════════════
-  Takes an array of regulation objects and renders them into the page.
-
-  document.getElementById() finds an HTML element by its id attribute.
-  innerHTML sets the HTML content inside that element.
-  We use .map() to transform each regulation into a card HTML string,
-  then .join('') to combine all strings into one big string with no separator.
-*/
-function renderCards(list) {
-  const grid = document.getElementById('results-grid');
-  const emptyState = document.getElementById('empty-state');
-  const countEl = document.getElementById('results-count');
-
-  if (list.length === 0) {
-    /*
-      If no regulations match, hide the grid and show the empty state message.
-      We set innerHTML to empty string to clear any previous cards.
-    */
-    grid.innerHTML = '';
-    emptyState.style.display = 'block';
-    countEl.textContent = 'No regulations found';
-  } else {
-    emptyState.style.display = 'none';
-    grid.innerHTML = list.map(buildCard).join('');
-    /*
-      Ternary operator: condition ? valueIfTrue : valueIfFalse
-      This is a compact way to write a simple if/else.
-    */
-    countEl.textContent = `Showing ${list.length} regulation${list.length === 1 ? '' : 's'}`;
-  }
-}
 
 
-/*
-  ══════════════════════════════════════════════════════════════
-  applyFilters()
-  ══════════════════════════════════════════════════════════════
-  Called when the user clicks the Search button.
-  Reads the values from each filter, then uses .filter() to
-  return only regulations that match ALL active filters.
-
-  Array .filter() creates a new array containing only items
-  where the callback function returns true.
-*/
-function applyFilters() {
-  /*
-    .value reads the currently selected option from a <select>
-    or the typed text from an <input>.
-    .toLowerCase() converts to lowercase so search is case-insensitive —
-    "PIPL" and "pipl" both match.
-    .trim() removes accidental leading/trailing spaces.
-  */
-  const jurisdiction = document.getElementById('jurisdiction-filter').value;
-  const theme        = document.getElementById('theme-filter').value;
-  const keyword      = document.getElementById('search-input').value.toLowerCase().trim();
-
-  const filtered = regulations.filter(reg => {
-    /*
-      Each condition checks one filter.
-      If the filter is empty (user selected "All"), the condition is true
-      (meaning that filter doesn't exclude anything).
-      All conditions must be true for a regulation to be included.
-    */
-    const matchJurisdiction = jurisdiction === '' || reg.jurisdiction === jurisdiction;
-    const matchTheme        = theme === ''        || reg.theme === theme;
-
-    /*
-      For keyword search, we check if the keyword appears in any
-      of the text fields. || means OR — the keyword just needs to
-      appear in at least one field.
-    */
-    const matchKeyword = keyword === '' ||
-      reg.title.toLowerCase().includes(keyword) ||
-      reg.summary.toLowerCase().includes(keyword) ||
-      reg.keyRequirements.toLowerCase().includes(keyword) ||
-      reg.jurisdictionLabel.toLowerCase().includes(keyword);
-
-    return matchJurisdiction && matchTheme && matchKeyword;
-  });
-
-  renderCards(filtered);
-}
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  clearFilters()
-  ══════════════════════════════════════════════════════════════
-  Resets all filters to their default empty state and re-renders all cards.
-*/
-function clearFilters() {
-  document.getElementById('jurisdiction-filter').value = '';
-  document.getElementById('theme-filter').value = '';
-  document.getElementById('search-input').value = '';
-  renderCards(regulations);
-}
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  openModal(id)
-  ══════════════════════════════════════════════════════════════
-  Called when a user clicks a regulation card.
-  Finds the matching regulation by id, builds the detail HTML,
-  injects it into the modal, and makes the modal visible.
-*/
-function openModal(id) {
-  /*
-    .find() searches an array and returns the FIRST item where
-    the callback returns true. reg.id === id finds the right regulation.
-  */
-  const reg = regulations.find(r => r.id === id);
-  if (!reg) return;   /* Safety check — if no match found, do nothing */
-
-  const theme = themeConfig[reg.theme];
-
-  /*
-    We build the modal HTML using a template literal.
-    Each section has a heading and content.
-  */
-  const html = `
-    <div class="modal-jurisdiction">${reg.jurisdictionLabel}</div>
-    <h2 class="modal-title">${reg.title}</h2>
-    <div class="theme-tag ${theme.cssClass}" style="margin-bottom:20px">${theme.label}</div>
-
-    <div class="modal-section">
-      <h3>Overview</h3>
-      <p>${reg.summary}</p>
-    </div>
-
-    <div class="modal-section">
-      <h3>Key Requirements</h3>
-      <p>${reg.keyRequirements}</p>
-    </div>
-
-    <div class="modal-section">
-      <h3>Effective Date</h3>
-      <p>${reg.effectiveDate}</p>
-    </div>
-
-    <div class="modal-section">
-      <h3>Startup Implication</h3>
-      <p>${reg.startupImplication}</p>
-    </div>
-
-    <a href="${reg.sourceUrl}" target="_blank" rel="noopener noreferrer" class="modal-link">
-      View Primary Source: ${reg.source} ↗
-    </a>
-  `;
-
-  document.getElementById('modal-content').innerHTML = html;
-
-  /*
-    Adding the 'active' class to the overlay triggers the CSS rule
-    .modal-overlay.active { display: flex; } — making the modal visible.
-    This is a common pattern: JavaScript adds/removes CSS classes,
-    and CSS controls the visual result.
-  */
-  document.getElementById('modal-overlay').classList.add('active');
-
-  /*
-    Prevent the page behind from scrolling while the modal is open.
-    We do this by setting overflow:hidden on the body.
-  */
-  document.body.style.overflow = 'hidden';
-}
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  closeModal()
-  ══════════════════════════════════════════════════════════════
-  Hides the modal and restores page scrolling.
-*/
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('active');
-  document.body.style.overflow = '';   /* Restore scrolling */
-}
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  KEYBOARD SUPPORT
-  ══════════════════════════════════════════════════════════════
-  Good accessibility practice: users should be able to close the
-  modal by pressing Escape.
-
-  document.addEventListener listens for events on the whole page.
-  'keydown' fires whenever any key is pressed.
-  e.key === 'Escape' checks if the pressed key was Escape.
-*/
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
-});
-
-/*
-  Allow pressing Enter in the search input to trigger the search —
-  more intuitive than requiring a mouse click on the button.
-*/
-document.getElementById('search-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') applyFilters();
-});
-
-
-/*
-  ══════════════════════════════════════════════════════════════
-  INITIAL RENDER
-  ══════════════════════════════════════════════════════════════
-  This line runs when the page first loads.
-  It calls renderCards with ALL regulations, so the user sees
-  everything before applying any filters.
-
-  This is the last line — it runs after all the functions above
-  have been defined, so there's no risk of calling an undefined function.
-*/
-renderCards(regulations);
