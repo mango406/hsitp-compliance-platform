@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Portolan</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>/* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ════════════════════════════════════════════════════════════ */
+:root {
+  --blue:        #2563EB;
+  --blue-mid:    #3B82F6;
+  --blue-light:  #DBEAFE;
+  --blue-xlight: #EFF6FF;
+  --ink:         #0F172A;
+  --ink-mid:     #334155;
+  --ink-light:   #64748B;
+  --rule:        #E2E8F0;
+  --surface:     #F8FAFC;
+  --white:       #FFFFFF;
+
+  --c-data:         #0369A1; --c-data-bg:         #E0F2FE;
+  --c-crossborder:  #6D28D9; --c-crossborder-bg:  #EDE9FE;
+  --c-transparency: #0F766E; --c-transparency-bg: #CCFBF1;
+  --c-licensing:    #B45309; --c-licensing-bg:    #FEF3C7;
+
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --radius:       8px;
+  --radius-sm:    5px;
+  --shadow:       0 1px 3px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-lg:    0 8px 28px rgba(0,0,0,0.12);
+  --sidebar-w:    260px;
+  --header-h:     52px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--ink-mid); background: var(--surface); line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: var(--font-body); }
+
+/* ── HEADER ─────────────────────────────────────────────────  */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: rgba(255,255,255,0.93);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+  z-index: 300;
+  display: flex; align-items: center;
+}
+.header-inner {
+  max-width: 1300px; margin: 0 auto;
+  padding: 0 28px; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  display: flex; align-items: center; gap: 7px;
+  font-weight: 600; font-size: 0.9rem; color: var(--ink);
+  text-decoration: none;
+}
+.logo-mark {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.logo-pill { background: var(--blue); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+.logo-rest { color: var(--ink-light); font-weight: 500; }
+.header-nav { display: flex; gap: 22px; }
+.nav-link { font-size: 0.82rem; font-weight: 500; color: var(--ink-light); transition: color 0.15s; }
+.nav-link:hover { color: var(--blue); }
+
+/* ── WELCOME ─────────────────────────────────────────────────  */
+.welcome {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #0A1628 0%, #0F2D5E 50%, #1A4B8C 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding-top: var(--header-h);
+}
+.ambient-words { position: absolute; inset: 0; pointer-events: none; user-select: none; }
+.aw { position: absolute; font-family: var(--font-display); color: rgba(255,255,255,0.04); font-style: italic; white-space: nowrap; }
+.aw-1  { top:  8%; left:  5%; font-size: 5.5rem; }
+.aw-2  { top: 12%; right: 7%; font-size: 8rem; }
+.aw-3  { top: 40%; left:  2%; font-size: 3.5rem; }
+.aw-4  { top: 62%; left: 10%; font-size: 6rem; }
+.aw-5  { top: 74%; right: 5%; font-size: 4.5rem; }
+.aw-6  { top: 26%; left: 36%; font-size: 3rem; opacity: 0.03; }
+.aw-7  { top: 82%; left: 42%; font-size: 4rem; }
+.aw-8  { top:  4%; left: 56%; font-size: 2.8rem; }
+.aw-9  { top: 50%; right: 3%; font-size: 7rem; }
+.aw-10 { top: 88%; left:  2%; font-size: 3rem; }
+.aw-11 { top: 32%; right: 22%; font-size: 4.5rem; }
+.aw-12 { top: 67%; right: 28%; font-size: 2.8rem; }
+
+.welcome-content { position: relative; z-index: 1; text-align: center; max-width: 640px; padding: 36px 28px; }
+.welcome-eyebrow { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 16px; }
+.welcome-title { font-family: var(--font-display); font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 400; color: #fff; line-height: 1.15; margin-bottom: 18px; letter-spacing: -0.02em; }
+.welcome-title em { font-style: italic; color: #93C5FD; }
+.welcome-sub { font-size: 0.92rem; color: rgba(255,255,255,0.65); max-width: 480px; margin: 0 auto 24px; line-height: 1.65; }
+.welcome-meta { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.meta-chip { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 4px 13px; font-size: 0.78rem; color: rgba(255,255,255,0.8); }
+.meta-chip strong { color: #fff; }
+.btn-explore { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff; font-size: 0.88rem; font-weight: 600; padding: 11px 26px; border-radius: 999px; border: none; transition: background 0.2s, transform 0.2s; cursor: pointer; }
+.btn-explore:hover { background: var(--blue-mid); transform: translateY(-1px); }
+.btn-arrow { font-size: 1rem; animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+.scroll-hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+/* ── PLATFORM LAYOUT ─────────────────────────────────────────  */
+.platform {
+  display: flex; min-height: 100vh;
+  max-width: 1300px; margin: 0 auto;
+  padding-top: 40px; align-items: flex-start;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────  */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0;
+  position: sticky; top: calc(var(--header-h) + 20px);
+  max-height: calc(100vh - var(--header-h) - 40px);
+  overflow-y: auto; padding: 0 0 40px 24px;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+.sidebar-inner { background: var(--white); border-radius: var(--radius); border: 1px solid var(--rule); padding: 18px 20px; box-shadow: var(--shadow); }
+.sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+.sidebar-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink); }
+.btn-clear-all { font-size: 0.72rem; color: var(--blue); background: none; border: none; font-weight: 600; padding: 0; }
+.btn-clear-all:hover { text-decoration: underline; }
+
+.filter-block { margin-bottom: 16px; }
+.filter-label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-light); margin-bottom: 6px; }
+.search-wrap { position: relative; }
+.filter-input { width: 100%; padding: 7px 10px 7px 30px; border: 1.5px solid var(--rule); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--ink); background: var(--surface); transition: border-color 0.15s; }
+.filter-input:focus { outline: none; border-color: var(--blue); }
+.search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--ink-light); pointer-events: none; }
+.filter-select {
+  width: 100%; padding: 7px 28px 7px 10px;
+  border: 1.5px solid var(--rule); border-radius: var(--radius-sm);
+  font-size: 0.82rem; color: var(--ink); background: var(--surface);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  cursor: pointer; transition: border-color 0.15s;
+}
+.filter-select:focus { outline: none; border-color: var(--blue); }
+
+.theme-pills { display: flex; flex-direction: column; gap: 5px; }
+.theme-pill { text-align: left; padding: 6px 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--rule); background: var(--white); font-size: 0.78rem; font-weight: 500; color: var(--ink-mid); transition: all 0.12s; }
+.theme-pill:hover { border-color: var(--blue); color: var(--blue); }
+.theme-pill.active { background: var(--blue-xlight); border-color: var(--blue-light); color: var(--blue); font-weight: 600; }
+.theme-pill[data-theme="data"].active         { background: var(--c-data-bg);         border-color: #BAE6FD; color: var(--c-data); }
+.theme-pill[data-theme="crossborder"].active  { background: var(--c-crossborder-bg);  border-color: #C4B5FD; color: var(--c-crossborder); }
+.theme-pill[data-theme="transparency"].active { background: var(--c-transparency-bg); border-color: #99F6E4; color: var(--c-transparency); }
+.theme-pill[data-theme="licensing"].active    { background: var(--c-licensing-bg);    border-color: #FDE68A; color: var(--c-licensing); }
+.btn-apply { width: 100%; padding: 8px 0; background: var(--blue); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; transition: background 0.15s; margin-top: 4px; }
+.btn-apply:hover { background: var(--blue-mid); }
+
+/* ── RESULTS AREA ────────────────────────────────────────────  */
+.results-area { flex: 1; min-width: 0; padding: 0 28px 56px; }
+.results-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+.results-count { font-size: 0.8rem; color: var(--ink-light); font-weight: 500; }
+.sort-wrap { display: flex; align-items: center; gap: 7px; }
+.sort-label { font-size: 0.76rem; color: var(--ink-light); }
+.sort-select { padding: 4px 24px 4px 8px; border: 1.5px solid var(--rule); border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--ink); background: var(--white); appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; cursor: pointer; }
+
+/* Active filter tags */
+.active-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; min-height: 0; }
+.active-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--blue-xlight); border: 1px solid var(--blue-light); border-radius: 999px; padding: 2px 9px 2px 10px; font-size: 0.73rem; font-weight: 600; color: var(--blue); }
+.tag-remove { background: none; border: none; color: var(--blue); font-size: 0.95rem; line-height: 1; padding: 0; opacity: 0.7; }
+.tag-remove:hover { opacity: 1; }
+
+/* ── OVERVIEW PANEL ──────────────────────────────────────────  */
+#overview-panel { display: none; margin-bottom: 22px; }
+.overview-inner {
+  background: linear-gradient(135deg, #EFF6FF 0%, #F0FDF4 100%);
+  border: 1.5px solid var(--blue-light);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+}
+.overview-eyebrow { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 5px; }
+.overview-title { font-family: var(--font-display); font-size: 1.2rem; color: var(--ink); margin-bottom: 10px; font-weight: 400; line-height: 1.3; }
+.overview-intro { font-size: 0.84rem; color: var(--ink-mid); line-height: 1.65; margin-bottom: 14px; }
+.overview-sub { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-light); margin-bottom: 8px; }
+.overview-list { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.overview-list li { font-size: 0.82rem; color: var(--ink-mid); line-height: 1.5; padding-left: 16px; position: relative; }
+.overview-list li::before { content: "→"; position: absolute; left: 0; color: var(--blue); font-size: 0.74rem; }
+.overview-note { font-size: 0.78rem; color: var(--ink-light); line-height: 1.55; padding: 9px 12px; background: rgba(255,255,255,0.7); border-radius: var(--radius-sm); border-left: 3px solid var(--blue-light); }
+.overview-note strong { color: var(--ink-mid); }
+
+/* ── THEME GROUP ─────────────────────────────────────────────  */
+.results-grid { display: flex; flex-direction: column; gap: 24px; }
+.theme-group { display: flex; flex-direction: column; }
+.theme-group-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.theme-group-count { font-size: 0.72rem; color: var(--ink-light); font-weight: 500; }
+
+/* ── THEME TAGS ──────────────────────────────────────────────  */
+.theme-tag { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: 0.68rem; font-weight: 700; }
+.theme-tag.data         { background: var(--c-data-bg);         color: var(--c-data); }
+.theme-tag.crossborder  { background: var(--c-crossborder-bg);  color: var(--c-crossborder); }
+.theme-tag.transparency { background: var(--c-transparency-bg); color: var(--c-transparency); }
+.theme-tag.licensing    { background: var(--c-licensing-bg);    color: var(--c-licensing); }
+
+/* ── SQUARE TILES ────────────────────────────────────────────
+   This is the key UI element — small square buttons, title only.
+   Content is revealed only in the popup modal.
+   ────────────────────────────────────────────────────────────  */
+.tiles-grid {
+  display: grid;
+  /*
+    Fixed square-ish tiles: 160px minimum width.
+    Auto-fill means as many columns as fit the space.
+  */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.reg-tile {
+  /* Square via aspect-ratio */
+  aspect-ratio: 1 / 1;
+  background: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, background 0.15s;
+}
+.reg-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue-light);
+  background: var(--blue-xlight);
+}
+
+/* Short name badge at top */
+.tile-badge {
+  background: var(--ink);
+  color: var(--white);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.reg-tile:hover .tile-badge { background: var(--blue); }
+
+/* Regulation name at bottom */
+.tile-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.35;
+  /* Allow wrapping — tiles are square so text can fill the space */
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* ── EMPTY STATE ─────────────────────────────────────────────  */
+.empty-state { text-align: center; padding: 60px 24px; }
+.empty-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--ink); margin-bottom: 6px; }
+.empty-sub { font-size: 0.84rem; color: var(--ink-light); }
+
+/* ── MODAL ───────────────────────────────────────────────────  */
+.modal-overlay { position: fixed; inset: 0; background: rgba(10,22,40,0.52); display: none; align-items: center; justify-content: center; z-index: 400; padding: 20px; }
+.modal-overlay.active { display: flex; }
+.modal-box { background: var(--white); border-radius: 12px; box-shadow: var(--shadow-lg); max-width: 680px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 36px 40px; position: relative; }
+.modal-box::-webkit-scrollbar { width: 3px; }
+.modal-box::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+.modal-close { position: absolute; top: 16px; right: 18px; background: var(--surface); border: 1px solid var(--rule); border-radius: 50%; width: 30px; height: 30px; font-size: 1.1rem; color: var(--ink-light); line-height: 1; transition: background 0.15s; cursor: pointer; }
+.modal-close:hover { background: var(--rule); }
+.modal-region { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue); margin-bottom: 5px; }
+.modal-title { font-family: var(--font-display); font-size: 1.45rem; color: var(--ink); margin-bottom: 12px; line-height: 1.25; }
+.modal-section { margin-bottom: 18px; }
+.modal-section h3 { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-light); margin-bottom: 6px; }
+.modal-section p { font-size: 0.87rem; color: var(--ink-mid); line-height: 1.65; }
+
+/* Key articles table */
+.articles-list { display: flex; flex-direction: column; }
+.article-row { display: grid; grid-template-columns: 190px 1fr; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.article-row:last-child { border-bottom: none; }
+.article-ref  { font-size: 0.75rem; font-weight: 700; color: var(--blue); }
+.article-text { font-size: 0.82rem; color: var(--ink-mid); line-height: 1.55; }
+
+/* Source links */
+.modal-sources { display: flex; gap: 14px; padding-top: 14px; border-top: 1px dashed var(--rule); flex-wrap: wrap; margin-top: 4px; }
+.source-link { font-size: 0.77rem; font-weight: 600; text-decoration: none; transition: opacity 0.15s; }
+.source-link:hover { opacity: 0.7; }
+.source-link.primary  { color: var(--blue);      border-bottom: 1.5px solid var(--blue-light); }
+.source-link.secondary{ color: var(--ink-light); border-bottom: 1.5px solid var(--rule); }
+
+/* ── FOOTER ──────────────────────────────────────────────────  */
+.site-footer { background: var(--ink); padding: 18px 28px; }
+.footer-inner { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.footer-left, .footer-right { display: flex; align-items: center; gap: 8px; font-size: 0.74rem; color: rgba(255,255,255,0.38); }
+.footer-logo { color: rgba(255,255,255,0.65); font-weight: 600; }
+.footer-divider { opacity: 0.3; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────  */
+@media (max-width: 900px) {
+  .platform { flex-direction: column; padding-top: 20px; }
+  .sidebar { width: 100%; position: static; max-height: none; padding: 0 16px; overflow: visible; }
+  .results-area { padding: 0 16px 40px; }
+  .about-inner { grid-template-columns: 1fr; gap: 20px; }
+  .tiles-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+}
+@media (max-width: 600px) {
+  .welcome-title { font-size: 2rem; }
+  .header-inner { padding: 0 14px; }
+  .logo-rest { display: none; }
+  .modal-box { padding: 24px 18px; }
+  .article-row { grid-template-columns: 1fr; gap: 3px; }
+}
+
+/* ── MODAL SOURCES LIST ──────────────────────────────────────
+   Multiple descriptive source links stacked vertically.
+   ──────────────────────────────────────────────────────────── */
+.sources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.modal-sources {
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule);
+  margin-top: 4px;
+}
+.modal-sources h3 {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   WELCOME — Portolan wordmark + tagline
+   ════════════════════════════════════════════════════════════ */
+.welcome-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.05;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.welcome-tagline {
+  font-size: 1.15rem;
+  color: #93C5FD;
+  margin-bottom: 20px;
+  font-family: var(--font-display);
+}
+.welcome-tagline em { font-style: italic; }
+
+/* Nav active state */
+.nav-link.active { color: var(--blue); font-weight: 600; }
+
+/* Footer link */
+.footer-link {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-link:hover { color: #fff; }
+
+/* ════════════════════════════════════════════════════════════
+   ABOUT PAGE
+   ════════════════════════════════════════════════════════════ */
+.about-page {
+  padding-top: var(--header-h);
+  background: var(--white);
+}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.about-hero {
+  background: linear-gradient(145deg, #0A1628 0%, #0F2D5E 55%, #1A4B8C 100%);
+  padding: 80px 28px 72px;
+}
+.about-hero-inner {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.about-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 14px;
+}
+.about-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 22px;
+  letter-spacing: -0.02em;
+}
+.about-lede {
+  font-size: 1.08rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+.about-lede em { color: #93C5FD; font-style: italic; }
+.about-lede-sub {
+  font-size: 0.98rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.75;
+}
+
+/* ── SECTIONS ────────────────────────────────────────────── */
+.about-section {
+  padding: 60px 28px;
+}
+.about-section-alt {
+  background: var(--surface);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.about-inner-narrow {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.about-h2 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 16px;
+  line-height: 1.25;
+}
+.about-body {
+  font-size: 0.95rem;
+  color: var(--ink-mid);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.about-body:last-child { margin-bottom: 0; }
+
+/* ── THREE-COLUMN CARDS ──────────────────────────────────── */
+.about-grid {
+  max-width: 1150px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.about-card {
+  background: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 28px 26px;
+  position: relative;
+}
+.about-card-num {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--blue);
+  background: var(--blue-xlight);
+  border-radius: 5px;
+  padding: 3px 9px;
+  margin-bottom: 14px;
+}
+.about-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.about-card p {
+  font-size: 0.89rem;
+  color: var(--ink-mid);
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+.about-card p:last-child { margin-bottom: 0; }
+
+/* ── COVERAGE LIST ───────────────────────────────────────── */
+.coverage-list {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+}
+.coverage-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.coverage-row:last-child { border-bottom: none; }
+.coverage-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--rule);
+  justify-self: center;
+}
+.coverage-dot.done    { background: var(--blue); }
+.coverage-dot.partial { background: #93C5FD; }
+.coverage-name {
+  font-size: 0.94rem;
+  color: var(--ink-mid);
+}
+.coverage-row .coverage-dot.done ~ .coverage-name,
+.coverage-row .coverage-dot.partial ~ .coverage-name {
+  color: var(--ink);
+  font-weight: 600;
+}
+.coverage-status {
+  font-size: 0.82rem;
+  color: var(--ink-light);
+  font-style: italic;
+}
+.coverage-status.done    { color: var(--blue); font-style: normal; font-weight: 600; }
+.coverage-status.partial { color: #3B82F6; font-style: normal; }
+
+/* ── NOTICE ──────────────────────────────────────────────── */
+.about-notice-section { padding-top: 0; }
+.about-notice {
+  background: var(--surface);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-sm);
+  padding: 22px 26px;
+}
+.about-notice h3 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+}
+.about-notice p {
+  font-size: 0.9rem;
+  color: var(--ink-mid);
+  line-height: 1.75;
+}
+
+/* ── CTA ─────────────────────────────────────────────────── */
+.about-cta {
+  background: var(--ink);
+  padding: 60px 28px 66px;
+  text-align: center;
+}
+.about-cta-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.about-cta-sub {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 26px;
+}
+.about-cta .btn-arrow { animation: none; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: 18px; }
+  .about-hero { padding: 56px 20px 48px; }
+  .about-section { padding: 44px 20px; }
+}
+@media (max-width: 600px) {
+  .coverage-row { grid-template-columns: 20px 1fr; }
+  .coverage-status { grid-column: 2; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+  <!-- ══ STICKY HEADER ══════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">Portolan</span>
+        <span class="logo-pill">AI</span>
+        <span class="logo-rest">Regulatory Repository</span>
+      </a>
+      <nav class="header-nav">
+        <a href="index.html#repository" class="nav-link">Search Regulations</a>
+        <a href="about.html" class="nav-link active">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ══ ABOUT PAGE ════════════════════════════════════════ -->
+  <main class="about-page">
+
+    <!-- Hero -->
+    <section class="about-hero">
+      <div class="about-hero-inner">
+        <p class="about-eyebrow">About the Repository</p>
+        <h1 class="about-title">Portolan</h1>
+        <p class="about-lede">
+          A <em>portolan</em> was a navigator's chart — compiled not from theory but from the
+          accumulated reports of pilots who had actually made the crossing. It showed coastlines,
+          harbours, and hazards, and it was valued because it was practical.
+        </p>
+        <p class="about-lede-sub">
+          This repository is built on the same principle: a working map of AI regulation,
+          assembled from primary legal sources, for organisations that need to cross
+          jurisdictional boundaries.
+        </p>
+      </div>
+    </section>
+
+    <!-- Three columns -->
+    <section class="about-section">
+      <div class="about-grid">
+        <div class="about-card">
+          <span class="about-card-num">01</span>
+          <h3>What it covers</h3>
+          <p>
+            Laws, regulations, and official guidance across four regulatory themes —
+            data governance, cross-border data flows, algorithmic transparency, and
+            licensing &amp; certification — mapped consistently across jurisdictions.
+          </p>
+          <p>
+            Every entry includes a plain-language overview, effective dates, the key
+            articles that matter in practice, penalty structures, and direct links to
+            official texts and recognised translations.
+          </p>
+        </div>
+
+        <div class="about-card">
+          <span class="about-card-num">02</span>
+          <h3>Who it is for</h3>
+          <p>
+            Legal, compliance, and strategy teams at organisations of any size seeking to
+            understand a regulatory environment before entering a new market or deploying
+            an AI-powered product.
+          </p>
+          <p>
+            Built with founders and early-stage teams in mind — the people least likely to
+            have in-house counsel and most likely to need a starting point rather than a
+            billable hour.
+          </p>
+        </div>
+
+        <div class="about-card">
+          <span class="about-card-num">03</span>
+          <h3>How it is structured</h3>
+          <p>
+            The same four questions are asked of every jurisdiction. That consistency is
+            what makes genuine comparison possible — without it, the result is simply a
+            list of laws rather than a map.
+          </p>
+          <p>
+            Where a single regulation is relevant to more than one theme, it appears under
+            each, with the articles most relevant to that context brought forward.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coverage -->
+    <section class="about-section about-section-alt">
+      <div class="about-inner-narrow">
+        <h2 class="about-h2">Current coverage</h2>
+        <p class="about-body">
+          The repository is populated jurisdiction by jurisdiction. Regions listed as complete
+          have all four regulatory themes documented; others are in development.
+        </p>
+
+        <div class="coverage-list">
+          <div class="coverage-row">
+            <span class="coverage-dot done"></span>
+            <span class="coverage-name">Mainland China</span>
+            <span class="coverage-status done">All four themes</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot done"></span>
+            <span class="coverage-name">Hong Kong SAR</span>
+            <span class="coverage-status done">All four themes</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot done"></span>
+            <span class="coverage-name">United States</span>
+            <span class="coverage-status done">All four themes</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot partial"></span>
+            <span class="coverage-name">European Union</span>
+            <span class="coverage-status partial">Data governance &amp; cross-border</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot"></span>
+            <span class="coverage-name">United Kingdom</span>
+            <span class="coverage-status">Planned</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot"></span>
+            <span class="coverage-name">MENA</span>
+            <span class="coverage-status">Planned</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot"></span>
+            <span class="coverage-name">South &amp; Southeast Asia</span>
+            <span class="coverage-status">Planned</span>
+          </div>
+          <div class="coverage-row">
+            <span class="coverage-dot"></span>
+            <span class="coverage-name">Australia &amp; New Zealand</span>
+            <span class="coverage-status">Planned</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sources & method -->
+    <section class="about-section">
+      <div class="about-inner-narrow">
+        <h2 class="about-h2">Sources and method</h2>
+        <p class="about-body">
+          Entries are drawn from official government publications wherever available. Where a
+          regulation exists only in its original language, the repository links both the
+          official text and a recognised English translation — most often from Stanford's
+          DigiChina project or China Law Translate for PRC instruments, and EUR-Lex for EU law.
+        </p>
+        <p class="about-body">
+          Key articles are selected rather than exhaustive. A statute may contain seventy
+          provisions; the ten that determine whether an organisation is compliant are the ones
+          reproduced here. Where an article is omitted, the primary source link remains the
+          authoritative reference.
+        </p>
+        <p class="about-body">
+          Some areas move faster than others. United States AI regulation in particular has
+          seen substantial change within single legislative sessions — Colorado repealed and
+          replaced its AI Act in 2026 before the original had taken effect. Entries should be
+          verified against primary sources before being relied upon.
+        </p>
+      </div>
+    </section>
+
+    <!-- Notice -->
+    <section class="about-section about-notice-section">
+      <div class="about-inner-narrow">
+        <div class="about-notice">
+          <h3>Important notice</h3>
+          <p>
+            This repository provides general informational guidance only and does not constitute
+            legal advice. It is not a substitute for qualified counsel in any jurisdiction.
+            Regulations change frequently — always verify against the linked primary sources
+            before making compliance decisions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="about-cta">
+      <div class="about-inner-narrow">
+        <h2 class="about-cta-title">Start with a jurisdiction</h2>
+        <p class="about-cta-sub">Filter by region and theme to see the regulations that apply.</p>
+        <a href="index.html#repository" class="btn-explore">
+          Explore Regulations
+          <span class="btn-arrow">→</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-logo">Portolan</span>
+        <span class="footer-divider">·</span>
+        <span>HSITP Ecosystem Development Division</span>
+      </div>
+      <div class="footer-right">
+        <a href="index.html" class="footer-link">Repository</a>
+        <span class="footer-divider">·</span>
+        <span>Current as of August 2026</span>
+        <span class="footer-divider">·</span>
+        <span>Not legal advice</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
