@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HSITP AI Compliance Repository</title>
+  <title>Portolan — AI Regulatory Repository</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,19 +13,19 @@
   <!-- ══ STICKY HEADER ══════════════════════════════════════ -->
   <header class="site-header">
     <div class="header-inner">
-      <div class="logo">
-        <span class="logo-hsitp">HSITP</span>
+      <a href="index.html" class="logo">
+        <span class="logo-mark">Portolan</span>
         <span class="logo-pill">AI</span>
-        <span class="logo-rest">Compliance Platform</span>
-      </div>
+        <span class="logo-rest">Regulatory Repository</span>
+      </a>
       <nav class="header-nav">
-        <a href="#platform" class="nav-link">Search Regulations</a>
-        <a href="#about" class="nav-link">About</a>
+        <a href="#repository" class="nav-link">Search Regulations</a>
+        <a href="about.html" class="nav-link">About</a>
       </nav>
     </div>
   </header>
 
-  <!-- ══ WELCOME PAGE (full viewport) ══════════════════════ -->
+  <!-- ══ WELCOME (full viewport) ═══════════════════════════ -->
   <section class="welcome" id="welcome">
 
     <!-- Ambient jurisdiction names in background -->
@@ -40,27 +41,25 @@
       <span class="aw aw-9">AI Act</span>
       <span class="aw aw-10">CCPA</span>
       <span class="aw aw-11">DSL</span>
-      <span class="aw aw-12">NIS2</span>
+      <span class="aw aw-12">HIPAA</span>
     </div>
 
     <div class="welcome-content">
-      <p class="welcome-eyebrow">HSITP Ecosystem Development Division</p>
       <h1 class="welcome-title">
-        AI Compliance,<br>
-        <em>Without the Guesswork</em>
+        Portolan
       </h1>
+      <p class="welcome-tagline"><em>AI regulation, charted.</em></p>
       <p class="welcome-sub">
-        A reference platform for navigating AI regulations across global markets.
-        Search by jurisdiction, regulatory theme, and country — built for organisations
-        operating across the US, China, Hong Kong, EU, and beyond.
+        A working reference for organisations navigating AI regulation across jurisdictions.
+        Search by region, country, and regulatory theme — each entry linked to its primary source.
       </p>
       <div class="welcome-meta">
         <div class="meta-chip"><strong>8</strong> Regions</div>
         <div class="meta-chip"><strong>4</strong> Themes</div>
-        <div class="meta-chip"><strong>25+</strong> Regulations</div>
+        <div class="meta-chip"><strong>123</strong> Regulations</div>
         <div class="meta-chip">Updated <strong>Aug 2026</strong></div>
       </div>
-      <a href="#platform" class="btn-explore" id="explore-btn">
+      <a href="#repository" class="btn-explore" id="explore-btn">
         Explore Regulations
         <span class="btn-arrow">↓</span>
       </a>
@@ -69,26 +68,8 @@
     <div class="scroll-hint" aria-hidden="true">scroll</div>
   </section>
 
-  <!-- ══ ABOUT STRIP ════════════════════════════════════════ -->
-  <section class="about-strip" id="about">
-    <div class="about-inner">
-      <div class="about-col">
-        <h3>What this platform covers</h3>
-        <p>Laws, regulations, and official guidance across four regulatory themes — data governance, algorithmic transparency, cross-border data flows, and licensing requirements — mapped to jurisdictions worldwide.</p>
-      </div>
-      <div class="about-col">
-        <h3>Who it is for</h3>
-        <p>Legal, compliance, and strategy teams at companies of any size seeking to understand the regulatory environment before entering new markets or deploying AI-powered products.</p>
-      </div>
-      <div class="about-col">
-        <h3>Important notice</h3>
-        <p>This platform provides general informational guidance only and does not constitute legal advice. Regulations change frequently — always verify against primary sources before making compliance decisions.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ MAIN PLATFORM ══════════════════════════════════════ -->
-  <section class="platform" id="platform">
+  <!-- ══ REPOSITORY ════════════════════════════════════════ -->
+  <section class="platform" id="repository">
 
     <!-- ── SIDEBAR FILTERS ───────────────────────────────── -->
     <aside class="sidebar">
@@ -99,21 +80,14 @@
           <button class="btn-clear-all" onclick="clearFilters()">Clear all</button>
         </div>
 
-        <!-- KEYWORD SEARCH -->
         <div class="filter-block">
           <label class="filter-label" for="search-input">Keyword</label>
           <div class="search-wrap">
-            <input
-              type="text"
-              id="search-input"
-              class="filter-input"
-              placeholder="e.g. PIPL, GDPR, cross-border…"
-            >
+            <input type="text" id="search-input" class="filter-input" placeholder="e.g. PIPL, GDPR, SCCs…">
             <span class="search-icon">⌕</span>
           </div>
         </div>
 
-        <!-- REGION → COUNTRY CASCADE -->
         <div class="filter-block">
           <label class="filter-label" for="region-filter">Region</label>
           <select id="region-filter" class="filter-select" onchange="onRegionChange()">
@@ -124,15 +98,12 @@
             <option value="eu">European Union</option>
             <option value="uk">United Kingdom</option>
             <option value="mena">MENA</option>
-            <option value="sea">South & Southeast Asia</option>
-            <option value="anz">Australia & New Zealand</option>
+            <option value="sea">South &amp; Southeast Asia</option>
+            <option value="anz">Australia &amp; New Zealand</option>
           </select>
         </div>
 
-        <!--
-          Country dropdown — hidden until a region is selected.
-          onRegionChange() populates and shows this.
-        -->
+        <!-- Country dropdown — hidden until a region is selected -->
         <div class="filter-block" id="country-block" style="display:none;">
           <label class="filter-label" for="country-filter">Country</label>
           <select id="country-filter" class="filter-select">
@@ -140,7 +111,6 @@
           </select>
         </div>
 
-        <!-- THEME -->
         <div class="filter-block">
           <label class="filter-label">Regulatory Theme</label>
           <div class="theme-pills" id="theme-pills">
@@ -148,7 +118,7 @@
             <button class="theme-pill" data-theme="data" onclick="selectTheme(this)">Data Governance</button>
             <button class="theme-pill" data-theme="crossborder" onclick="selectTheme(this)">Cross-Border Flows</button>
             <button class="theme-pill" data-theme="transparency" onclick="selectTheme(this)">Algorithmic Transparency</button>
-            <button class="theme-pill" data-theme="licensing" onclick="selectTheme(this)">Licensing & Certification</button>
+            <button class="theme-pill" data-theme="licensing" onclick="selectTheme(this)">Licensing &amp; Certification</button>
           </div>
         </div>
 
@@ -162,20 +132,11 @@
 
       <div class="results-topbar">
         <span id="results-count" class="results-count">Showing all regulations</span>
-        <div class="sort-wrap">
-          <label for="sort-select" class="sort-label">Sort by</label>
-          <select id="sort-select" class="sort-select" onchange="applyFilters()">
-            <option value="default">Default</option>
-            <option value="az">A – Z</option>
-            <option value="recent">Most recent</option>
-          </select>
-        </div>
       </div>
 
-      <!-- Active filter tags row -->
       <div id="active-tags" class="active-tags"></div>
 
-      <!-- Topic overview panel — shown when region + theme are both selected -->
+      <!-- Topic overview — shown when region + theme are both selected -->
       <div id="overview-panel"></div>
 
       <div id="results-grid" class="results-grid"></div>
@@ -183,7 +144,7 @@
       <div id="empty-state" class="empty-state" style="display:none;">
         <p class="empty-title">No regulations found</p>
         <p class="empty-sub">Try broadening your filters or clearing the keyword search.</p>
-        <button class="btn-apply" onclick="clearFilters()" style="margin-top:16px;">Clear filters</button>
+        <button class="btn-apply" onclick="clearFilters()" style="margin-top:14px;">Clear filters</button>
       </div>
 
     </main>
@@ -197,16 +158,55 @@
     </div>
   </div>
 
+  <!-- ══ PORTOLAN ASSISTANT ═════════════════════════════════ -->
+  <button class="pa-launcher" id="pa-launcher" onclick="openAssistant()">
+    <span class="pa-launcher-icon">⌕</span>
+    Ask Portolan
+  </button>
+
+  <div class="pa-panel" id="pa-panel" role="dialog" aria-label="Portolan Assistant">
+    <div class="pa-header">
+      <div>
+        <div class="pa-header-title">Ask Portolan</div>
+        <div class="pa-header-sub">Searches 123 regulations across 8 regions</div>
+      </div>
+      <button class="pa-close" onclick="closeAssistant()" aria-label="Close">×</button>
+    </div>
+
+    <div class="pa-log" id="pa-log">
+      <div class="pa-msg pa-bot">
+        <p class="pa-intro">
+          Ask a question about AI regulation in any covered jurisdiction. I'll search the
+          repository and show you the relevant entries, with the specific articles that apply.
+        </p>
+        <p class="pa-suggest-label">Try one of these</p>
+        <div class="pa-suggests">
+          <button class="pa-suggest" onclick="askAssistant('What is required to transfer data out of China?')">What is required to transfer data out of China?</button>
+          <button class="pa-suggest" onclick="askAssistant('Do I need a licence to deploy AI in Hong Kong?')">Do I need a licence to deploy AI in Hong Kong?</button>
+          <button class="pa-suggest" onclick="askAssistant('How must AI-generated content be labelled in the EU?')">How must AI-generated content be labelled in the EU?</button>
+          <button class="pa-suggest" onclick="askAssistant('automated decision-making rights in the UK')">Automated decision-making rights in the UK</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pa-inputbar">
+      <input type="text" class="pa-input" id="pa-input" placeholder="Ask about a jurisdiction or topic…" autocomplete="off">
+      <button class="pa-send" onclick="askAssistant()">Ask</button>
+    </div>
+  </div>
+
   <!-- ══ FOOTER ════════════════════════════════════════════ -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-left">
-        <span class="footer-logo">HSITP AI Compliance Platform</span>
+        <span class="footer-logo">Portolan</span>
         <span class="footer-divider">·</span>
-        <span>Ecosystem Development Division</span>
+        <span>HSITP Ecosystem Development Division</span>
       </div>
       <div class="footer-right">
-        <span>Content current as of August 2026</span>
+        <a href="about.html" class="footer-link">About</a>
+        <span class="footer-divider">·</span>
+        <span>Current as of August 2026</span>
         <span class="footer-divider">·</span>
         <span>Not legal advice</span>
       </div>
@@ -216,4 +216,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
